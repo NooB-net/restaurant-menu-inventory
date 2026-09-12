@@ -5,73 +5,133 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.restaurant.inventory.controller.InventoryController">
+            fx:controller="com.restaurant.inventory.controller.InventoryController"
+            styleClass="view-root">
     <padding>
-        <Insets top="12" right="12" bottom="8" left="12"/>
+        <Insets top="14" right="16" bottom="12" left="16"/>
     </padding>
 
+    <!-- ================= TOP: WARNING BANNER & TITLE ================= -->
     <top>
-        <VBox spacing="6">
+        <VBox spacing="10">
             <padding>
-                <Insets bottom="8"/>
+                <Insets bottom="12"/>
             </padding>
-            <Label text="Ingredient stock (TableView + ObservableList)" styleClass="section-title"/>
-            <Label fx:id="stockAlertLabel" styleClass="alert-label" wrapText="true"/>
+
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Ingredients &amp; Supply Purchases (Administrator)" styleClass="page-title"/>
+                    <Label text="Monitor kitchen stocks, track shortage deficits, and replenish depleted items" styleClass="page-subtitle"/>
+                </VBox>
+                <Button text="🔔 Check Stock Warnings" onAction="#onTriggerWarning" styleClass="warning-action-btn"/>
+            </HBox>
+
+            <!-- REQUIREMENT 2 & 3: Not enough ingredient warning banner -->
+            <HBox fx:id="inventoryWarningBanner" spacing="12" alignment="CENTER_LEFT" styleClass="warning-banner" visible="false" managed="false">
+                <Label text="⚠" styleClass="warning-icon"/>
+                <Label fx:id="inventoryWarningLabel" text="" styleClass="warning-text" wrapText="true" HBox.hgrow="ALWAYS"/>
+                <Button text="View Shortage Details" onAction="#onTriggerWarning" styleClass="secondary-btn"/>
+            </HBox>
         </VBox>
     </top>
 
+    <!-- ================= CENTER: SPLIT TABLES ================= -->
     <center>
-        <TableView fx:id="ingredientTable">
-            <columns>
-                <TableColumn fx:id="nameCol" text="Ingredient" prefWidth="190"/>
-                <TableColumn fx:id="qtyCol" text="In stock" prefWidth="100"/>
-                <TableColumn fx:id="unitCol" text="Unit" prefWidth="80"/>
-                <TableColumn fx:id="minCol" text="Low level" prefWidth="100"/>
-                <TableColumn fx:id="statusCol" text="Status" prefWidth="140"/>
-            </columns>
-        </TableView>
+        <SplitPane dividerPositions="0.55" orientation="HORIZONTAL">
+            <!-- Left Panel: All Available Ingredients -->
+            <VBox spacing="8" styleClass="modern-card">
+                <padding>
+                    <Insets top="12" right="12" bottom="12" left="12"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="All Available Ingredients" styleClass="card-section-title" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <TableView fx:id="ingredientTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                    <columns>
+                        <TableColumn fx:id="nameCol" text="Ingredient" prefWidth="150"/>
+                        <TableColumn fx:id="qtyCol" text="In Stock" prefWidth="85"/>
+                        <TableColumn fx:id="unitCol" text="Unit" prefWidth="65"/>
+                        <TableColumn fx:id="minCol" text="Safe Min" prefWidth="85"/>
+                        <TableColumn fx:id="statusCol" text="Status" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right Panel: Items that Need to Be Purchased -->
+            <VBox spacing="8" styleClass="modern-card">
+                <padding>
+                    <Insets top="12" right="12" bottom="12" left="12"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Items That Need to Be Purchased" styleClass="card-section-title" HBox.hgrow="ALWAYS"/>
+                    <Label text="⚠ Shortages" styleClass="status-pill-mini"/>
+                </HBox>
+                <TableView fx:id="purchaseTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                    <columns>
+                        <TableColumn fx:id="purNameCol" text="Depleted Item" prefWidth="130"/>
+                        <TableColumn fx:id="purStockCol" text="Current" prefWidth="70"/>
+                        <TableColumn fx:id="purMinCol" text="Target" prefWidth="70"/>
+                        <TableColumn fx:id="purDeficitCol" text="Shortage" prefWidth="75"/>
+                        <TableColumn fx:id="purSuggestedCol" text="To Buy" prefWidth="75"/>
+                        <TableColumn fx:id="purStatusCol" text="Status" prefWidth="110"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Button text="🛒 Purchase Selected" onAction="#onPurchaseSelected" styleClass="modern-primary-btn"/>
+                    <Button text="⚡ Auto-Purchase All" onAction="#onPurchaseAllNeeded" styleClass="secondary-btn"/>
+                </HBox>
+            </VBox>
+        </SplitPane>
     </center>
 
+    <!-- ================= RIGHT: RESTOCK & ACCUMULATE DEMO ================= -->
     <right>
-        <VBox spacing="14" prefWidth="320">
+        <VBox spacing="14" prefWidth="300">
             <padding>
                 <Insets left="14"/>
             </padding>
 
-            <TitledPane text="Restock" collapsible="false">
-                <content>
-                    <VBox spacing="8">
-                        <padding>
-                            <Insets top="8" right="8" bottom="8" left="8"/>
-                        </padding>
-                        <Label fx:id="selectedIngredientLabel" text="Select an ingredient in the table" wrapText="true"/>
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <TextField fx:id="restockField" promptText="amount to add" prefWidth="130"/>
-                            <Button text="Restock" onAction="#onRestock"/>
-                        </HBox>
-                        <Label fx:id="restockMessageLabel" styleClass="info-label" wrapText="true"/>
-                    </VBox>
-                </content>
-            </TitledPane>
+            <!-- Manual Restock Card -->
+            <VBox spacing="10" styleClass="modern-card">
+                <padding>
+                    <Insets top="12" right="12" bottom="12" left="12"/>
+                </padding>
+                <Label text="Replenish Stock" styleClass="card-section-title"/>
+                <Label fx:id="selectedIngredientLabel" text="Select an ingredient in the table" wrapText="true" styleClass="info-label"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="restockField" promptText="Amount to add" prefWidth="130" styleClass="modern-input"/>
+                    <Button text="Restock" onAction="#onRestock" styleClass="modern-primary-btn"/>
+                </HBox>
+                <Label fx:id="restockMessageLabel" styleClass="info-label" wrapText="true"/>
+            </VBox>
 
-            <TitledPane text="Accumulate (ProgressBar)" collapsible="false">
-                <content>
-                    <VBox spacing="8">
-                        <padding>
-                            <Insets top="8" right="8" bottom="8" left="8"/>
-                        </padding>
-                        <Label text="Enter a number N. Each press adds N to the sum; the bar is full after N presses." wrapText="true"/>
-                        <TextField fx:id="targetField" promptText="e.g. 5"/>
-                        <HBox spacing="8">
-                            <Button text="Accumulate" onAction="#onAccumulate"/>
-                            <Button text="Reset" onAction="#onResetAccumulate"/>
-                        </HBox>
-                        <Label fx:id="sumLabel" styleClass="field-label"/>
-                        <Label fx:id="pressesLabel"/>
-                        <ProgressBar fx:id="progressBar" prefWidth="270" progress="0.0"/>
-                    </VBox>
-                </content>
-            </TitledPane>
+            <!-- Accumulate / ProgressBar demo Card -->
+            <VBox spacing="10" styleClass="modern-card">
+                <padding>
+                    <Insets top="12" right="12" bottom="12" left="12"/>
+                </padding>
+                <Label text="Accumulate (ProgressBar)" styleClass="card-section-title"/>
+                <Label text="Enter number N. Each press adds N to sum; bar is full after N presses." wrapText="true" styleClass="text-muted"/>
+                <TextField fx:id="targetField" promptText="e.g. 5" styleClass="modern-input"/>
+                <HBox spacing="8">
+                    <Button text="Accumulate" onAction="#onAccumulate" styleClass="secondary-btn"/>
+                    <Button text="Reset" onAction="#onResetAccumulate" styleClass="secondary-btn"/>
+                </HBox>
+                <Label fx:id="sumLabel" styleClass="field-label"/>
+                <Label fx:id="pressesLabel" styleClass="field-label"/>
+                <ProgressBar fx:id="progressBar" prefWidth="270" progress="0.0"/>
+            </VBox>
         </VBox>
     </right>
+
+    <!-- ================= BOTTOM: STATUS BAR ================= -->
+    <bottom>
+        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="status-bar">
+            <padding>
+                <Insets top="8" right="14" bottom="8" left="14"/>
+            </padding>
+            <Label text="Stock Status:" styleClass="field-label"/>
+            <Label fx:id="stockAlertLabel" styleClass="alert-label" wrapText="true"/>
+        </HBox>
+    </bottom>
 </BorderPane>

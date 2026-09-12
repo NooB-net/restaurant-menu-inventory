@@ -27,12 +27,16 @@ import java.util.stream.Collectors;
  * The "brain" of the application. One shared instance (singleton) holds all the data,
  * so every tab (controller) sees the same ingredients, dishes and staff.
  *
- * Core idea:  ordering a dish  ->  deduct its ingredients from stock  ->  show what is out of stock.
+ * Core idea: ordering a dish -> deduct its ingredients from stock -> show what is out of stock.
  */
 public final class InventoryService {
 
-    /** Result of trying to place an order. */
-    public record OrderResult(boolean success, String message) { }
+    /** Result of trying to place an order, including any ingredients that depleted to 0. */
+    public record OrderResult(boolean success, String message, List<String> depletedIngredients) {
+        public OrderResult(boolean success, String message) {
+            this(success, message, List.of());
+        }
+    }
 
     private static final InventoryService INSTANCE = new InventoryService();
 
@@ -71,7 +75,7 @@ public final class InventoryService {
     public IntegerProperty stockVersionProperty() { return stockVersion; }
 
     public Dish findDish(String name) {
-        return dishes.stream().filter(d -> d.getName().equals(name)).findFirst().orElse(null);
+        return dishes.stream().filter(d -> d.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     public Ingredient findIngredient(String name) {
@@ -89,19 +93,84 @@ public final class InventoryService {
         List<String> missing = dish.missingIngredients(quantity);
         if (!missing.isEmpty()) {
             return new OrderResult(false, "Cannot prepare " + quantity + " x " + dish.getName()
-                    + ". Not enough: " + String.join(", ", missing));
+                    + "!\nNot enough: " + String.join(", ", missing));
         }
 
+        List<String> depleted = new ArrayList<>();
         for (RecipeLine line : dish.getRecipe()) {
             line.getIngredient().deduct(line.getAmount() * quantity);
+            if (line.getIngredient().isOutOfStock()) {
+                depleted.add(line.getIngredient().getName());
+            }
         }
 
         double total = dish.getPrice() * quantity;
         String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         orderHistory.add(0, String.format("%s   %d x %s   ($%.2f)", time, quantity, dish.getName(), total));
 
+        updateAlert();
+
         return new OrderResult(true, String.format("Order placed: %d x %s  -  total $%.2f. Ingredients deducted from stock.",
-                quantity, dish.getName(), total));
+                quantity, dish.getName(), total), depleted);
+    }
+
+    /** Returns all ingredients that need to be purchased (out of stock or low). */
+    public List<Ingredient> getItemsNeedingPurchase() {
+        return ingredients.stream()
+                .filter(Ingredient::needsPurchase)
+                .collect(Collectors.toList());
+    }
+
+    /** Automatically purchases/restocks all ingredients that are depleted or low. */
+    public int purchaseAllDeficits() {
+        int count = 0;
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient.needsPurchase()) {
+                double toAdd = ingredient.getSuggestedPurchase();
+                if (toAdd <= 0) {
+                    toAdd = Math.max(10, ingredient.getMinLevel() * 2);
+                }
+                ingredient.add(toAdd);
+                count++;
+            }
+        }
+        updateAlert();
+        return count;
+    }
+
+    /** Generates a human-readable summary of all ingredients that are low or out of stock. */
+    public String getShortageWarningSummary() {
+        List<String> outOfStock = ingredients.stream()
+                .filter(Ingredient::isOutOfStock)
+                .map(i -> "• " + i.getName() + ": OUT OF STOCK (0 " + i.getUnit() + ", minimum " + Ingredient.formatAmount(i.getMinLevel()) + " " + i.getUnit() + ")")
+                .collect(Collectors.toList());
+
+        List<String> lowStock = ingredients.stream()
+                .filter(Ingredient::isLow)
+                .map(i -> "• " + i.getName() + ": LOW (" + Ingredient.formatAmount(i.getQuantity()) + " " + i.getUnit() + ", minimum " + Ingredient.formatAmount(i.getMinLevel()) + " " + i.getUnit() + ")")
+                .collect(Collectors.toList());
+
+        List<String> unavailableDishes = dishes.stream()
+                .filter(d -> !d.isAvailable())
+                .map(d -> "• " + d.getName() + " (missing: " + String.join(", ", d.missingIngredients(1)) + ")")
+                .collect(Collectors.toList());
+
+        if (outOfStock.isEmpty() && lowStock.isEmpty() && unavailableDishes.isEmpty()) {
+            return "All ingredients are sufficiently stocked. No shortages detected.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (!outOfStock.isEmpty()) {
+            sb.append("OUT OF STOCK INGREDIENTS:\n").append(String.join("\n", outOfStock)).append("\n\n");
+        }
+        if (!lowStock.isEmpty()) {
+            sb.append("LOW STOCK INGREDIENTS (NEED PURCHASE):\n").append(String.join("\n", lowStock)).append("\n\n");
+        }
+        if (!unavailableDishes.isEmpty()) {
+            sb.append("MENU ITEMS CANNOT BE PREPARED:\n").append(String.join("\n", unavailableDishes));
+        }
+
+        return sb.toString().trim();
     }
 
     /** Puts every ingredient back to its starting quantity and clears the order history. */
@@ -149,7 +218,7 @@ public final class InventoryService {
 
     // ------------------------------------------------------------------ helpers
 
-    private void updateAlert() {
+    public void updateAlert() {
         String outOfStock = ingredients.stream()
                 .filter(Ingredient::isOutOfStock)
                 .map(Ingredient::getName)

@@ -2,54 +2,88 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.restaurant.inventory.controller.MainController">
+            fx:controller="com.restaurant.inventory.controller.MainController"
+            styleClass="main-window-root">
 
     <top>
-        <VBox>
-            <!-- MENUBAR: File -> New, Open, Exit -->
-            <MenuBar>
+        <VBox styleClass="top-nav-container">
+            <!-- MENUBAR: File -> New, Open, Switch User, Exit -->
+            <MenuBar styleClass="modern-menubar">
                 <menus>
                     <Menu text="File">
                         <items>
-                            <MenuItem text="New" onAction="#onNew"/>
-                            <MenuItem text="Open..." onAction="#onOpen"/>
+                            <MenuItem text="New Day (Reset Stock)" onAction="#onNew"/>
+                            <MenuItem text="Open CSV..." onAction="#onOpen"/>
                             <SeparatorMenuItem/>
+                            <MenuItem text="Switch User..." onAction="#onSwitchUser"/>
                             <MenuItem text="Exit" onAction="#onExit"/>
                         </items>
                     </Menu>
                 </menus>
             </MenuBar>
-            <Label fx:id="welcomeLabel" styleClass="app-title"/>
+
+            <!-- Modern Application Header with Active User Session Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="app-header-bar">
+                <padding>
+                    <Insets top="10" right="16" bottom="10" left="16"/>
+                </padding>
+
+                <!-- Left: Title -->
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label fx:id="welcomeLabel" styleClass="app-main-title"/>
+                    <Label text="Smart Food Catalog &amp; Real-time Stock Management" styleClass="app-sub-title"/>
+                </VBox>
+
+                <!-- Right: Active User Session Controls -->
+                <HBox alignment="CENTER_RIGHT" spacing="12">
+                    <!-- User Avatar Thumbnail -->
+                    <StackPane styleClass="header-avatar-frame">
+                        <ImageView fx:id="userAvatarImage" fitWidth="34" fitHeight="34" preserveRatio="true"/>
+                    </StackPane>
+
+                    <!-- User Name & Role Badge -->
+                    <VBox alignment="CENTER_LEFT" spacing="2">
+                        <Label fx:id="userNameLabel" styleClass="header-user-name"/>
+                        <Label fx:id="userRoleBadge" styleClass="header-role-badge"/>
+                    </VBox>
+
+                    <!-- Logout Button -->
+                    <Button text="Sign Out" onAction="#onLogout" styleClass="header-logout-btn"/>
+                </HBox>
+            </HBox>
         </VBox>
     </top>
 
     <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE">
-            <Tab text="Orders">
-                <fx:include source="OrderView.fxml"/>
-            </Tab>
-            <Tab text="Inventory">
-                <fx:include source="InventoryView.fxml"/>
-            </Tab>
-            <Tab text="Menu">
-                <fx:include source="MenuView.fxml"/>
-            </Tab>
-            <Tab text="Staff">
-                <fx:include source="StaffView.fxml"/>
-            </Tab>
-            <Tab text="Kitchen Tools">
-                <fx:include source="ToolsView.fxml"/>
-            </Tab>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" styleClass="modern-tab-pane">
+            <tabs>
+                <Tab fx:id="menuTab" text="Menu &amp; Orders">
+                    <fx:include source="OrderView.fxml"/>
+                </Tab>
+                <Tab fx:id="inventoryTab" text="Ingredients &amp; Purchases">
+                    <fx:include source="InventoryView.fxml"/>
+                </Tab>
+                <Tab fx:id="staffTab" text="Staff Directory">
+                    <fx:include source="StaffView.fxml"/>
+                </Tab>
+                <Tab fx:id="toolsTab" text="Kitchen Tools">
+                    <fx:include source="ToolsView.fxml"/>
+                </Tab>
+                <Tab fx:id="profileTab" text="My Profile">
+                    <fx:include source="ProfileView.fxml"/>
+                </Tab>
+            </tabs>
         </TabPane>
     </center>
 
     <bottom>
-        <HBox styleClass="status-bar" spacing="8">
-            <Label text="Stock status:"/>
-            <Label fx:id="statusLabel"/>
+        <HBox styleClass="status-bar" spacing="10" alignment="CENTER_LEFT">
+            <Label text="Live Kitchen Stock:" styleClass="status-bar-title"/>
+            <Label fx:id="statusLabel" styleClass="status-bar-text" wrapText="true"/>
         </HBox>
     </bottom>
 </BorderPane>

@@ -8,22 +8,57 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/** Application entry point: loads MainView.fxml and shows the window. */
+/**
+ * Application entry point: manages the primary Stage and switches between
+ * the LoginView and MainView based on authentication state.
+ */
 public class Main extends Application {
 
+    private static Stage primaryStage;
+
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainView.fxml"));
-        Parent root = loader.load();
+    public void start(Stage stage) {
+        primaryStage = stage;
+        primaryStage.setTitle("The Gourmet Kitchen - Restaurant Menu & Inventory Management");
+        primaryStage.setMinWidth(1100);
+        primaryStage.setMinHeight(720);
 
-        Scene scene = new Scene(root, 1180, 760);
-        scene.getStylesheets().add(Main.class.getResource("/css/styles.css").toExternalForm());
+        showLoginView();
+        primaryStage.show();
+    }
 
-        stage.setTitle("Restaurant Menu Inventory");
-        stage.setScene(scene);
-        stage.setMinWidth(1000);
-        stage.setMinHeight(650);
-        stage.show();
+    public static void showLoginView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/LoginView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 1050, 680);
+            scene.getStylesheets().add(Main.class.getResource("/css/styles.css").toExternalForm());
+
+            primaryStage.setScene(scene);
+            primaryStage.centerOnScreen();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showMainView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 1240, 780);
+            scene.getStylesheets().add(Main.class.getResource("/css/styles.css").toExternalForm());
+
+            primaryStage.setScene(scene);
+            primaryStage.centerOnScreen();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public static void main(String[] args) {
