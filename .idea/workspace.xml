@@ -4,36 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3504aa61-08d5-4e7f-87f1-ebea7db2faf1" name="Changes" comment="Basic Structure">
+    <list default="true" id="3504aa61-08d5-4e7f-87f1-ebea7db2faf1" name="Changes" comment="Edited version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/InventoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/InventoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/model/Dish.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/model/Dish.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/model/Ingredient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/model/Ingredient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/service/InventoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/service/InventoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/InventoryView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/InventoryView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/MainView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/OrderView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/OrderView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/MainController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/model/Dish.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/model/Dish.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/model/Ingredient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/model/Ingredient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/service/InventoryService$OrderResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/service/InventoryService$OrderResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/service/InventoryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/service/InventoryService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/InventoryView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/InventoryView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/MainView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/OrderView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/OrderView.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +30,65 @@
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.020757531139834" />
+      <entry key="MS500" value="1.7497221238324854" />
+      <entry key="S2" value="3.0561915941629207" />
+      <entry key="S5" value="3.5731406560883867" />
+      <entry key="S10" value="3.777303237061593" />
+      <entry key="S30" value="3.9236005578559667" />
+      <entry key="S60" value="3.9615223413211105" />
+      <entry key="M2" value="3.9806911466712807" />
+      <entry key="M5" value="3.992259583346516" />
+      <entry key="M10" value="3.9961269733016938" />
+      <entry key="M15" value="3.9974173554646355" />
+      <entry key="M30" value="3.9987083642560735" />
+      <entry key="H1" value="3.99935410373872" />
+      <entry key="H2" value="3.999677032269498" />
+      <entry key="H4" value="3.9998385112344663" />
+      <entry key="D1" value="3.999973084525123" />
+      <entry key="W1" value="3.9999961549154928" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9204199836322129" />
+      <entry key="MS500" value="1.66863666398308" />
+      <entry key="S2" value="2.982814263000102" />
+      <entry key="S5" value="3.5338890756274575" />
+      <entry key="S10" value="3.755646866660527" />
+      <entry key="S30" value="3.915889067424563" />
+      <entry key="S60" value="3.9576022435638234" />
+      <entry key="M2" value="3.978714795424574" />
+      <entry key="M5" value="3.9914651025629158" />
+      <entry key="M10" value="3.9957290738736373" />
+      <entry key="M15" value="3.9971519425543116" />
+      <entry key="M30" value="3.9985755844452795" />
+      <entry key="H1" value="3.9992876954863195" />
+      <entry key="H2" value="3.999643823555534" />
+      <entry key="H4" value="3.999821905730417" />
+      <entry key="D1" value="3.9999703167817895" />
+      <entry key="W1" value="3.9999957595196847" />
+    </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2,
@@ -114,7 +145,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Basic Structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic Structure" />
+    <MESSAGE value="Edited version" />
+    <option name="LAST_COMMIT_MESSAGE" value="Edited version" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
