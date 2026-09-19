@@ -4,15 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3504aa61-08d5-4e7f-87f1-ebea7db2faf1" name="Changes" comment="Edited version">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="3504aa61-08d5-4e7f-87f1-ebea7db2faf1" name="Changes" comment="Edited version" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="module" />
+      <option value="repository" />
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -33,23 +42,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.020757531139834" />
-      <entry key="MS500" value="1.7497221238324854" />
-      <entry key="S2" value="3.0561915941629207" />
-      <entry key="S5" value="3.5731406560883867" />
-      <entry key="S10" value="3.777303237061593" />
-      <entry key="S30" value="3.9236005578559667" />
-      <entry key="S60" value="3.9615223413211105" />
-      <entry key="M2" value="3.9806911466712807" />
-      <entry key="M5" value="3.992259583346516" />
-      <entry key="M10" value="3.9961269733016938" />
-      <entry key="M15" value="3.9974173554646355" />
-      <entry key="M30" value="3.9987083642560735" />
-      <entry key="H1" value="3.99935410373872" />
-      <entry key="H2" value="3.999677032269498" />
-      <entry key="H4" value="3.9998385112344663" />
-      <entry key="D1" value="3.999973084525123" />
-      <entry key="W1" value="3.9999961549154928" />
+      <entry key="MS100" value="1.089003137224817" />
+      <entry key="MS500" value="1.6164261627319034" />
+      <entry key="S2" value="1.8860745559339644" />
+      <entry key="S5" value="1.952770070866804" />
+      <entry key="S10" value="1.9760994164872776" />
+      <entry key="S30" value="1.9919688115110699" />
+      <entry key="S60" value="1.995976310717815" />
+      <entry key="M2" value="1.9979861275177202" />
+      <entry key="M5" value="1.9991939638017897" />
+      <entry key="M10" value="1.9995969006563543" />
+      <entry key="M15" value="1.9997312490466586" />
+      <entry key="M30" value="1.9998656154937318" />
+      <entry key="H1" value="1.9999328054893173" />
+      <entry key="H2" value="1.9999665039245884" />
+      <entry key="H4" value="2.0006211487135594" />
+      <entry key="D1" value="2.931492882205875" />
+      <entry key="W1" value="5.248243898803366" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -71,23 +80,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9204199836322129" />
-      <entry key="MS500" value="1.66863666398308" />
-      <entry key="S2" value="2.982814263000102" />
-      <entry key="S5" value="3.5338890756274575" />
-      <entry key="S10" value="3.755646866660527" />
-      <entry key="S30" value="3.915889067424563" />
-      <entry key="S60" value="3.9576022435638234" />
-      <entry key="M2" value="3.978714795424574" />
-      <entry key="M5" value="3.9914651025629158" />
-      <entry key="M10" value="3.9957290738736373" />
-      <entry key="M15" value="3.9971519425543116" />
-      <entry key="M30" value="3.9985755844452795" />
-      <entry key="H1" value="3.9992876954863195" />
-      <entry key="H2" value="3.999643823555534" />
-      <entry key="H4" value="3.999821905730417" />
-      <entry key="D1" value="3.9999703167817895" />
-      <entry key="W1" value="3.9999957595196847" />
+      <entry key="MS100" value="0.989194439460073" />
+      <entry key="MS500" value="1.5783940314287073" />
+      <entry key="S2" value="1.8742396394718333" />
+      <entry key="S5" value="1.9478048112554744" />
+      <entry key="S10" value="1.9735762875577612" />
+      <entry key="S30" value="1.9911185810116125" />
+      <entry key="S60" value="1.9955500351148054" />
+      <entry key="M2" value="1.9977726987275741" />
+      <entry key="M5" value="1.9991085223329277" />
+      <entry key="M10" value="1.9995541682534832" />
+      <entry key="M15" value="1.9997027581843765" />
+      <entry key="M30" value="1.9998513687655612" />
+      <entry key="H1" value="1.9999256818009414" />
+      <entry key="H2" value="1.9999629419984788" />
+      <entry key="H4" value="2.0006193650821893" />
+      <entry key="D1" value="2.931491940832997" />
+      <entry key="W1" value="5.248243535312687" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -108,7 +117,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "v2",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/LAPTOP 3/Downloads/restaurant-menu-inventory",
     "node.js.detected.package.eslint": "true",
