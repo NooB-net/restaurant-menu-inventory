@@ -71,8 +71,8 @@ public class RestaurantAppTest {
         assertEquals(Role.ADMIN, adminRes.user().getRole());
         assertTrue(adminRes.user().isAdmin());
 
-        // 6. Successful Normal User login
-        UserService.AuthResult userRes = userService.authenticate("user", "user123");
+        // 6. Successful Normal User login (no password needed for standard users)
+        UserService.AuthResult userRes = userService.authenticate("user", "");
         assertTrue(userRes.success());
         assertNotNull(userRes.user());
         assertEquals(Role.USER, userRes.user().getRole());
@@ -186,7 +186,6 @@ public class RestaurantAppTest {
                 "/fxml/OrderView.fxml",
                 "/fxml/InventoryView.fxml",
                 "/fxml/StaffView.fxml",
-                "/fxml/ToolsView.fxml",
                 "/fxml/ProfileView.fxml",
                 "/fxml/MainView.fxml"
         };

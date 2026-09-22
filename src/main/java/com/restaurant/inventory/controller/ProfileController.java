@@ -185,8 +185,15 @@ public class ProfileController implements Initializable {
         LocalDate dob = dobPicker.getValue();
         String bio = bioArea.getText().trim();
 
+        String gender = "Other";
         Toggle selectedGender = genderGroup.getSelectedToggle();
-        String gender = selectedGender != null ? ((RadioButton) selectedGender).getText() : "Other";
+        if (selectedGender == maleRadio) {
+            gender = "Male";
+        } else if (selectedGender == femaleRadio) {
+            gender = "Female";
+        } else if (selectedGender == otherRadio) {
+            gender = "Other";
+        }
 
         // Validation
         if (name.isEmpty()) {

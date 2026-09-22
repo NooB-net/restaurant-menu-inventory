@@ -41,7 +41,6 @@ public class MainController implements Initializable {
     @FXML private Tab menuTab;
     @FXML private Tab inventoryTab;
     @FXML private Tab staffTab;
-    @FXML private Tab toolsTab;
     @FXML private Tab profileTab;
 
     private final InventoryService service = InventoryService.getInstance();
@@ -78,8 +77,8 @@ public class MainController implements Initializable {
         mainTabPane.getTabs().clear();
 
         if (user.getRole() == Role.ADMIN) {
-            // Administrator has access to all pages
-            mainTabPane.getTabs().addAll(menuTab, inventoryTab, staffTab, toolsTab, profileTab);
+            // Administrator has access to all pages except Kitchen Tools (removed)
+            mainTabPane.getTabs().addAll(menuTab, inventoryTab, staffTab, profileTab);
         } else {
             // Standard User has access to Menu page and Profile page
             mainTabPane.getTabs().addAll(menuTab, profileTab);

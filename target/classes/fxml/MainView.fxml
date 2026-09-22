@@ -11,20 +11,6 @@
 
     <top>
         <VBox styleClass="top-nav-container">
-            <!-- MENUBAR: File -> New, Open, Switch User, Exit -->
-            <MenuBar styleClass="modern-menubar">
-                <menus>
-                    <Menu text="File">
-                        <items>
-                            <MenuItem text="New Day (Reset Stock)" onAction="#onNew"/>
-                            <MenuItem text="Open CSV..." onAction="#onOpen"/>
-                            <SeparatorMenuItem/>
-                            <MenuItem text="Switch User..." onAction="#onSwitchUser"/>
-                            <MenuItem text="Exit" onAction="#onExit"/>
-                        </items>
-                    </Menu>
-                </menus>
-            </MenuBar>
 
             <!-- Modern Application Header with Active User Session Bar -->
             <HBox alignment="CENTER_LEFT" spacing="14" styleClass="app-header-bar">
@@ -69,9 +55,6 @@
                 </Tab>
                 <Tab fx:id="staffTab" text="Staff Directory">
                     <fx:include source="StaffView.fxml"/>
-                </Tab>
-                <Tab fx:id="toolsTab" text="Kitchen Tools">
-                    <fx:include source="ToolsView.fxml"/>
                 </Tab>
                 <Tab fx:id="profileTab" text="My Profile">
                     <fx:include source="ProfileView.fxml"/>

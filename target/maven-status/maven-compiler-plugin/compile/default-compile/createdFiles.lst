@@ -5,7 +5,6 @@ com\restaurant\inventory\service\UserService.class
 com\restaurant\inventory\model\Ingredient.class
 com\restaurant\inventory\controller\StaffController$1.class
 com\restaurant\inventory\service\InventoryService$OrderResult.class
-com\restaurant\inventory\controller\ToolsController.class
 com\restaurant\inventory\model\RecipeLine.class
 com\restaurant\inventory\controller\StaffController.class
 com\restaurant\inventory\controller\InventoryController$1.class
@@ -14,6 +13,7 @@ com\restaurant\inventory\util\AlertUtil.class
 com\restaurant\inventory\model\Dish.class
 com\restaurant\inventory\service\UserService$AuthResult.class
 com\restaurant\inventory\controller\LoginController.class
+com\restaurant\inventory\controller\StaffController$2.class
 com\restaurant\inventory\controller\OrderController.class
 com\restaurant\inventory\model\Role.class
 com\restaurant\inventory\model\User.class
