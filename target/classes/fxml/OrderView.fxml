@@ -6,64 +6,122 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.restaurant.inventory.controller.OrderController">
+            fx:controller="com.restaurant.inventory.controller.OrderController"
+            styleClass="view-root">
     <padding>
-        <Insets top="12" right="12" bottom="8" left="12"/>
+        <Insets top="14" right="16" bottom="12" left="16"/>
     </padding>
 
-    <!-- filled from Java code: TextField (Enter key) + Buttons -->
+    <!-- ================= TOP TOOLBAR & FILTERS ================= -->
     <top>
-        <HBox fx:id="quickBar" spacing="10" alignment="CENTER_LEFT">
+        <VBox spacing="10">
             <padding>
-                <Insets bottom="10"/>
+                <Insets bottom="12"/>
             </padding>
-        </HBox>
+            <HBox spacing="14" alignment="CENTER_LEFT">
+                <HBox fx:id="quickBar" spacing="10" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"/>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Label text="Category:" styleClass="field-label"/>
+                    <ComboBox fx:id="categoryFilterCombo" prefWidth="140" styleClass="modern-combo"/>
+                    <Label text="Filter:" styleClass="field-label"/>
+                    <ComboBox fx:id="stockFilterCombo" prefWidth="140" styleClass="modern-combo"/>
+                </HBox>
+            </HBox>
+        </VBox>
     </top>
 
+    <!-- ================= LEFT: DISH LIST WITH THUMBNAILS ================= -->
     <left>
-        <VBox spacing="6" prefWidth="270">
-            <Label text="Menu (ListView)" styleClass="section-title"/>
-            <ListView fx:id="dishList" VBox.vgrow="ALWAYS"/>
+        <VBox spacing="8" prefWidth="300" styleClass="modern-card">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            <Label text="Menu Catalog" styleClass="card-section-title"/>
+            <ListView fx:id="dishList" VBox.vgrow="ALWAYS" styleClass="modern-list-view"/>
         </VBox>
     </left>
 
+    <!-- ================= CENTER: DISH DETAILS, PICTURES & ORDERING ================= -->
     <center>
-        <VBox spacing="8" alignment="TOP_CENTER">
-            <padding>
-                <Insets left="14" right="14"/>
-            </padding>
-            <ImageView fx:id="dishImage" fitWidth="300" fitHeight="190" preserveRatio="true"/>
-            <Button text="Change Image" onAction="#onChangeImage"/>
-            <Label fx:id="selectedDishLabel" styleClass="section-title"/>
+        <ScrollPane fitToWidth="true" styleClass="content-scroll-pane">
+            <content>
+                <VBox spacing="12" alignment="TOP_CENTER" styleClass="modern-card">
+                    <padding>
+                        <Insets top="16" right="20" bottom="16" left="20"/>
+                    </padding>
 
-            <Label text="Ingredients needed" styleClass="field-label"/>
-            <TableView fx:id="recipeTable" prefHeight="190">
-                <columns>
-                    <TableColumn fx:id="recIngredientCol" text="Ingredient" prefWidth="150"/>
-                    <TableColumn fx:id="recNeededCol" text="Needed" prefWidth="100"/>
-                    <TableColumn fx:id="recInStockCol" text="In stock" prefWidth="100"/>
-                    <TableColumn fx:id="recStatusCol" text="Status" prefWidth="110"/>
-                </columns>
-            </TableView>
+                    <!-- Food Picture Frame -->
+                    <StackPane styleClass="food-photo-frame" minHeight="200" maxHeight="230">
+                        <ImageView fx:id="dishImage" fitWidth="340" fitHeight="200" preserveRatio="true"/>
+                    </StackPane>
 
-            <!-- the "Place Order" Button is added here from Java code -->
-            <HBox fx:id="actionBar" spacing="10" alignment="CENTER_LEFT">
-                <Label text="Quantity (1-10):" styleClass="field-label"/>
-                <Spinner fx:id="qtySpinner" prefWidth="90"/>
-            </HBox>
+                    <!-- Admin Picture Management Controls (Hidden for standard users) -->
+                    <VBox fx:id="adminPictureControls" spacing="6" alignment="CENTER" styleClass="admin-box">
+                        <Label fx:id="adminBadgeLabel" text="👑 Administrator Menu Management" styleClass="admin-control-title"/>
+                        <HBox spacing="8" alignment="CENTER">
+                            <Button text="📁 Upload Picture..." onAction="#onUploadPicture" styleClass="secondary-btn"/>
+                            <Button text="🖼 Gallery Presets" onAction="#onChangeImage" styleClass="secondary-btn"/>
+                            <Button text="🗑 Remove Picture" onAction="#onRemovePicture" styleClass="danger-btn"/>
+                        </HBox>
+                    </VBox>
 
-            <Label fx:id="orderSummaryLabel" wrapText="true"/>
-        </VBox>
+                    <!-- Dish Title & Badges -->
+                    <HBox spacing="10" alignment="CENTER">
+                        <Label fx:id="selectedDishLabel" styleClass="dish-title-label"/>
+                        <Label fx:id="dishCategoryBadge" styleClass="category-pill-badge"/>
+                        <Label fx:id="servingsBadge" styleClass="status-pill-mini"/>
+                    </HBox>
+
+                    <!-- Live Ingredient Shortage Warning Banner -->
+                    <HBox fx:id="dishWarningBanner" spacing="8" alignment="CENTER_LEFT" styleClass="warning-banner" maxWidth="Infinity">
+                        <Label text="⚠" styleClass="warning-icon"/>
+                        <Label fx:id="dishWarningLabel" text="" styleClass="warning-text" wrapText="true" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <!-- Recipe Ingredients Table -->
+                    <VBox spacing="6" maxWidth="Infinity">
+                        <Label text="Required Ingredients &amp; Live Stock" styleClass="field-label"/>
+                        <TableView fx:id="recipeTable" prefHeight="160" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="recIngredientCol" text="Ingredient" prefWidth="180"/>
+                                <TableColumn fx:id="recNeededCol" text="Required" prefWidth="110"/>
+                                <TableColumn fx:id="recInStockCol" text="In Stock" prefWidth="110"/>
+                                <TableColumn fx:id="recStatusCol" text="Stock Status" prefWidth="120"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+
+                    <!-- Order Action Bar -->
+                    <HBox fx:id="actionBar" spacing="12" alignment="CENTER_LEFT">
+                        <Label text="Servings (1-10):" styleClass="field-label"/>
+                        <Spinner fx:id="qtySpinner" prefWidth="90" styleClass="modern-spinner"/>
+                    </HBox>
+
+                    <Label fx:id="orderSummaryLabel" wrapText="true" styleClass="order-summary-text"/>
+                </VBox>
+            </content>
+        </ScrollPane>
     </center>
 
+    <!-- ================= RIGHT: ORDER HISTORY ================= -->
     <right>
-        <VBox spacing="6" prefWidth="260">
-            <Label text="Order history" styleClass="section-title"/>
-            <ListView fx:id="historyList" VBox.vgrow="ALWAYS"/>
+        <VBox spacing="8" prefWidth="250" styleClass="modern-card">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            <Label text="Recent Orders" styleClass="card-section-title"/>
+            <ListView fx:id="historyList" VBox.vgrow="ALWAYS" styleClass="modern-list-view"/>
         </VBox>
     </right>
 
+    <!-- ================= BOTTOM: SYSTEM STOCK ALERT ================= -->
     <bottom>
-        <Label fx:id="stockAlertLabel" styleClass="alert-label" wrapText="true"/>
+        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="status-bar">
+            <padding>
+                <Insets top="8" right="14" bottom="8" left="14"/>
+            </padding>
+            <Label text="Stock Status:" styleClass="field-label"/>
+            <Label fx:id="stockAlertLabel" styleClass="alert-label" wrapText="true"/>
+        </HBox>
     </bottom>
 </BorderPane>

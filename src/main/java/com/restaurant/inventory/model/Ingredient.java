@@ -56,6 +56,31 @@ public class Ingredient {
 
     public boolean isOutOfStock() { return getQuantity() <= 0; }
 
+    public boolean isLow() {
+        return getQuantity() > 0 && getQuantity() <= getMinLevel();
+    }
+
+    /** True if stock is out of stock or low and needs purchasing. */
+    public boolean needsPurchase() {
+        return getQuantity() <= getMinLevel();
+    }
+
+    /** How much is needed just to reach the minimum safe threshold. */
+    public double getDeficit() {
+        return Math.max(0, getMinLevel() - getQuantity());
+    }
+
+    /** Suggested quantity to purchase to reach a healthy stock level. */
+    public double getSuggestedPurchase() {
+        if (isOutOfStock()) {
+            return Math.max(getDefaultQuantity(), getMinLevel() * 2);
+        }
+        if (isLow()) {
+            return Math.max(getDefaultQuantity() - getQuantity(), getMinLevel());
+        }
+        return 0;
+    }
+
     /** Removes stock (never goes below zero). */
     public void deduct(double amount) { setQuantity(getQuantity() - amount); }
 
