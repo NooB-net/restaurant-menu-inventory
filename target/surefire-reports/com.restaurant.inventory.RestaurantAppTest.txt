@@ -1,0 +1,21 @@
+-------------------------------------------------------------------------------
+Test set: com.restaurant.inventory.RestaurantAppTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 4.045 s <<< FAILURE! -- in com.restaurant.inventory.RestaurantAppTest
+com.restaurant.inventory.RestaurantAppTest.testAllFxmlViewsLoadSuccessfully -- Time elapsed: 1.965 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: 
+FXML Error in /fxml/OrderView.fxml: 
+/C:/Users/LAPTOP%203/Downloads/restaurant-menu-inventory/target/classes/fxml/OrderView.fxml:59
+ ==> expected: <null> but was: <javafx.fxml.LoadException: 
+/C:/Users/LAPTOP%203/Downloads/restaurant-menu-inventory/target/classes/fxml/OrderView.fxml:59
+>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertNull.failNotNull(AssertNull.java:50)
+	at org.junit.jupiter.api.AssertNull.assertNull(AssertNull.java:35)
+	at org.junit.jupiter.api.Assertions.assertNull(Assertions.java:287)
+	at com.restaurant.inventory.RestaurantAppTest.testAllFxmlViewsLoadSuccessfully(RestaurantAppTest.java:211)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:583)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+
