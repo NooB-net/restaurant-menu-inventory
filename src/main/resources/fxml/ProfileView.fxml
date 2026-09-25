@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.restaurant.inventory.controller.ProfileController"
+            fitToWidth="true" styleClass="content-scroll-pane">
+
+    <VBox spacing="18" styleClass="profile-container">
+        <padding>
+            <Insets top="18" right="24" bottom="24" left="24"/>
+        </padding>
+
+        <!-- Header -->
+        <VBox spacing="4">
+            <Label text="Personal Profile Management" styleClass="page-title"/>
+            <Label text="View and update your personal information, contact details, and account credentials" styleClass="page-subtitle"/>
+        </VBox>
+
+        <HBox spacing="20" alignment="TOP_LEFT">
+            <!-- ================= LEFT PROFILE SUMMARY CARD ================= -->
+            <VBox spacing="16" prefWidth="280" minWidth="260" styleClass="modern-card" alignment="TOP_CENTER">
+                <padding>
+                    <Insets top="24" right="18" bottom="24" left="18"/>
+                </padding>
+
+                <!-- Avatar frame -->
+                <StackPane styleClass="profile-avatar-frame">
+                    <ImageView fx:id="avatarView" fitWidth="120" fitHeight="120" preserveRatio="true"/>
+                </StackPane>
+
+                <HBox spacing="8" alignment="CENTER">
+                    <Button text="Change Photo..." onAction="#onBrowseAvatar" styleClass="secondary-btn"/>
+                    <Button text="Reset" onAction="#onRemoveAvatar" styleClass="secondary-btn"/>
+                </HBox>
+
+                <VBox spacing="4" alignment="CENTER">
+                    <Label fx:id="displayNameLabel" styleClass="profile-name-label"/>
+                    <Label fx:id="usernameDisplayLabel" styleClass="profile-username-label"/>
+                    <Label fx:id="roleBadgeLabel" styleClass="role-pill-badge"/>
+                </VBox>
+
+                <Separator/>
+
+                <Label fx:id="roleDescriptionLabel" styleClass="profile-desc-label" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+
+            <!-- ================= RIGHT PROFILE EDIT FORM CARD ================= -->
+            <VBox spacing="16" styleClass="modern-card" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="24" right="24" bottom="24" left="24"/>
+                </padding>
+
+                <!-- Section 1: Basic Info -->
+                <Label text="Personal Details" styleClass="card-section-title"/>
+                <GridPane hgap="14" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <!-- Full Name -->
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Full Name *" styleClass="field-label"/>
+                        <TextField fx:id="fullNameField" promptText="Your full name" styleClass="modern-input"/>
+                    </VBox>
+
+                    <!-- Email -->
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Email Address" styleClass="field-label"/>
+                        <TextField fx:id="emailField" promptText="e.g. user@example.com" styleClass="modern-input"/>
+                    </VBox>
+
+                    <!-- Phone -->
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Phone Number" styleClass="field-label"/>
+                        <TextField fx:id="phoneField" promptText="+1 (555) 000-0000" styleClass="modern-input"/>
+                    </VBox>
+
+                    <!-- Country -->
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Country" styleClass="field-label"/>
+                        <ComboBox fx:id="countryCombo" promptText="Select Country" maxWidth="Infinity" styleClass="modern-combo"/>
+                    </VBox>
+
+                    <!-- Date of Birth -->
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="Date of Birth" styleClass="field-label"/>
+                        <DatePicker fx:id="dobPicker" maxWidth="Infinity" styleClass="modern-date-picker"/>
+                    </VBox>
+
+                    <!-- Gender -->
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label text="Gender" styleClass="field-label"/>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <RadioButton fx:id="maleRadio" text="Male">
+                                <toggleGroup>
+                                    <ToggleGroup fx:id="genderGroup"/>
+                                </toggleGroup>
+                            </RadioButton>
+                            <RadioButton fx:id="femaleRadio" text="Female" toggleGroup="$genderGroup"/>
+                            <RadioButton fx:id="otherRadio" text="Other" toggleGroup="$genderGroup"/>
+                        </HBox>
+                    </VBox>
+                </GridPane>
+
+                <!-- Bio / Notes -->
+                <VBox spacing="6">
+                    <Label text="Bio / Dietary Preferences / Kitchen Role" styleClass="field-label"/>
+                    <TextArea fx:id="bioArea" prefRowCount="2" promptText="A short note about yourself..." wrapText="true" styleClass="modern-textarea"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Section 2: Security & Password -->
+                <Label text="Change Password (Optional)" styleClass="card-section-title"/>
+                <GridPane hgap="14" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="33.3"/>
+                        <ColumnConstraints percentWidth="33.3"/>
+                        <ColumnConstraints percentWidth="33.3"/>
+                    </columnConstraints>
+
+                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Current Password" styleClass="field-label"/>
+                        <PasswordField fx:id="currentPasswordField" promptText="Verify old password" styleClass="modern-input"/>
+                    </VBox>
+
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="New Password" styleClass="field-label"/>
+                        <PasswordField fx:id="newPasswordField" promptText="At least 4 characters" styleClass="modern-input"/>
+                    </VBox>
+
+                    <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                        <Label text="Confirm New Password" styleClass="field-label"/>
+                        <PasswordField fx:id="confirmPasswordField" promptText="Repeat new password" styleClass="modern-input"/>
+                    </VBox>
+                </GridPane>
+
+                <!-- Feedback & Action Buttons -->
+                <HBox spacing="14" alignment="CENTER_LEFT">
+                    <Button text="Save Profile Changes" onAction="#onSaveProfile" styleClass="modern-primary-btn"/>
+                    <Button text="Reset / Revert" onAction="#onResetForm" styleClass="secondary-btn"/>
+                    <Label fx:id="profileMessageLabel" styleClass="field-label" wrapText="true"/>
+                </HBox>
+            </VBox>
+        </HBox>
+    </VBox>
+</ScrollPane>
