@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.restaurant.inventory.controller.LoginController"
+           styleClass="login-root">
+
+    <HBox alignment="CENTER" maxWidth="960" maxHeight="620" styleClass="login-card-container">
+        <!-- ================= LEFT BRAND PANEL ================= -->
+        <VBox prefWidth="420" spacing="18" styleClass="login-brand-panel" HBox.hgrow="NEVER">
+            <padding>
+                <Insets top="36" right="32" bottom="36" left="32"/>
+            </padding>
+
+            <VBox spacing="6">
+                <Label text="🍽 The Gourmet Kitchen" styleClass="login-brand-title"/>
+                <Label text="Restaurant Menu &amp; Inventory Management" styleClass="login-brand-subtitle"/>
+            </VBox>
+
+            <Separator styleClass="login-separator"/>
+
+            <VBox spacing="12">
+                <Label text="System Features &amp; Access:" styleClass="login-features-title"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="👑" styleClass="emoji-badge"/>
+                    <VBox>
+                        <Label text="Administrator Access" styleClass="feature-heading"/>
+                        <Label text="Manage menu photos, track stock, purchase supplies" styleClass="feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="👤" styleClass="emoji-badge"/>
+                    <VBox>
+                        <Label text="Standard Customer View" styleClass="feature-heading"/>
+                        <Label text="Explore delicious dishes, photos &amp; real-time availability" styleClass="feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="⚠" styleClass="emoji-badge"/>
+                    <VBox>
+                        <Label text="Smart Inventory Warnings" styleClass="feature-heading"/>
+                        <Label text="Instant alerts on ingredient shortages &amp; purchase needs" styleClass="feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Demo helper card -->
+            <VBox spacing="8" styleClass="demo-credentials-box">
+                <Label text="Demo Accounts for Testing:" styleClass="demo-title"/>
+                <Label text="• Admin: admin / admin123" styleClass="demo-text"/>
+                <Label text="• User: user / user123 or ayesha / user123" styleClass="demo-text"/>
+            </VBox>
+        </VBox>
+
+        <!-- ================= RIGHT LOGIN FORM PANEL ================= -->
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="login-scroll-pane" prefWidth="540" HBox.hgrow="ALWAYS">
+            <content>
+                <VBox spacing="16" styleClass="login-form-panel">
+                    <padding>
+                        <Insets top="36" right="40" bottom="36" left="40"/>
+                    </padding>
+
+                    <VBox spacing="4">
+                        <Label text="Sign In" styleClass="login-header"/>
+                        <Label text="Welcome back! Please enter your details below." styleClass="login-subheader"/>
+                    </VBox>
+
+                    <!-- WARNING BANNER (Shown for incorrect or empty inputs) -->
+                    <HBox fx:id="warningBanner" visible="false" managed="false" alignment="CENTER_LEFT" spacing="10" styleClass="warning-banner">
+                        <Label text="⚠" styleClass="warning-icon"/>
+                        <Label fx:id="warningLabel" text="" styleClass="warning-text" wrapText="true" HBox.hgrow="ALWAYS"/>
+                        <Button text="✕" styleClass="banner-dismiss-btn" onAction="#onDismissWarning"/>
+                    </HBox>
+
+                    <!-- Username Field -->
+                    <VBox spacing="6">
+                        <Label text="Username" styleClass="input-label"/>
+                        <TextField fx:id="usernameField" promptText="Enter your username (e.g. admin or user)" styleClass="modern-input"/>
+                    </VBox>
+
+                    <!-- Password Field with Show/Hide -->
+                    <VBox spacing="6">
+                        <Label text="Password" styleClass="input-label"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <StackPane HBox.hgrow="ALWAYS">
+                                <PasswordField fx:id="passwordField" promptText="Enter your password" styleClass="modern-input"/>
+                                <TextField fx:id="passwordPlainField" promptText="Enter your password" styleClass="modern-input" visible="false" managed="false"/>
+                            </StackPane>
+                            <Button fx:id="showPasswordBtn" text="Show" onAction="#onTogglePassword" styleClass="secondary-btn"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Sign In Action Button -->
+                    <Button text="Sign In to System" onAction="#onLogin" styleClass="modern-primary-btn" maxWidth="Infinity"/>
+
+                    <Separator/>
+
+                    <!-- Quick Testing Buttons -->
+                    <VBox spacing="8">
+                        <Label text="One-Click Fast Testing:" styleClass="field-label"/>
+                        <HBox spacing="10">
+                            <Button text="👑 Fast Login as Admin" onAction="#onFillAdmin" styleClass="demo-btn-admin" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                            <Button text="👤 Fast Login as User" onAction="#onFillUser" styleClass="demo-btn-user" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Register link -->
+                    <HBox alignment="CENTER" spacing="6">
+                        <Label text="Don't have an account?" styleClass="text-muted"/>
+                        <Button text="Create an Account" onAction="#onToggleRegister" styleClass="link-btn"/>
+                    </HBox>
+
+                    <!-- Expandable Registration Form -->
+                    <VBox fx:id="registerPane" visible="false" managed="false" spacing="10" styleClass="register-card">
+                        <Label text="Register New Account" styleClass="section-title"/>
+                        <TextField fx:id="regUsernameField" promptText="Desired username" styleClass="modern-input"/>
+                        <TextField fx:id="regFullNameField" promptText="Your full name" styleClass="modern-input"/>
+                        <PasswordField fx:id="regPasswordField" promptText="Password (min 4 chars)" styleClass="modern-input"/>
+                        <ComboBox fx:id="regRoleCombo" maxWidth="Infinity" styleClass="modern-combo"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button text="Register &amp; Login" onAction="#onRegister" styleClass="modern-primary-btn"/>
+                            <Label fx:id="regMessageLabel" wrapText="true"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </HBox>
+</StackPane>
