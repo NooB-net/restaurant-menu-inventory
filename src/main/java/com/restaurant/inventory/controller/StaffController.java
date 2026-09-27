@@ -7,19 +7,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -36,10 +25,9 @@ import java.util.stream.Collectors;
 
 /**
  * "Staff" tab: a registration form + a table of staff members (Person model).
- *
- * TOPICS HERE: TableView + ObservableList + Person model, RadioButton (gender),
- *              ToggleGroup (skill level), CheckBox (hobbies) + Submit, ComboBox (country),
- *              DatePicker + DateTimeFormatter, PasswordField (show/hide), FileChooser + ImageView.
+ * Topics: TableView + ObservableList + Person model, RadioButton (gender),
+ *         ToggleGroup (skill level), ComboBox (country), DatePicker,
+ *         FileChooser + ImageView (photo displayed in table).
  */
 public class StaffController implements Initializable {
 
@@ -47,20 +35,13 @@ public class StaffController implements Initializable {
 
     // ---- form controls
     @FXML private TextField nameField;
-    @FXML private ToggleGroup genderGroup;          // defined in FXML with <fx:define>
-    @FXML private ToggleGroup skillGroup;           // defined in FXML with <fx:define>
+    @FXML private ToggleGroup genderGroup;
+    @FXML private ToggleGroup skillGroup;
     @FXML private RadioButton beginnerRadio;
     @FXML private Label genderLabel;
     @FXML private ComboBox<String> countryCombo;
     @FXML private DatePicker dobPicker;
     @FXML private Label dobLabel;
-    @FXML private CheckBox readingCheck;
-    @FXML private CheckBox gamingCheck;
-    @FXML private CheckBox travelingCheck;
-    @FXML private Label hobbiesLabel;
-    @FXML private PasswordField passwordField;
-    @FXML private TextField passwordPlainField;
-    @FXML private Button showPasswordButton;
     @FXML private ImageView photoView;
     @FXML private Label photoNameLabel;
     @FXML private Label formMessageLabel;
@@ -72,11 +53,10 @@ public class StaffController implements Initializable {
     @FXML private TableColumn<Person, String> skillCol;
     @FXML private TableColumn<Person, String> countryCol;
     @FXML private TableColumn<Person, String> dobCol;
-    @FXML private TableColumn<Person, String> hobbiesCol;
     @FXML private TableColumn<Person, String> photoCol;
 
     private final InventoryService service = InventoryService.getInstance();
-    private String selectedPhotoUri;     // set by the Browse button
+    private String selectedPhotoUri;
     private String selectedPhotoName;
 
     @Override
@@ -86,27 +66,54 @@ public class StaffController implements Initializable {
         setupSkillLevel();
         setupCountries();
         setupDatePicker();
-        setupPassword();
 
-        hobbiesLabel.setText("Selected hobbies: (press Submit)");
         photoNameLabel.setText("No photo chosen");
     }
 
     // ================================================================= TABLEVIEW + Person
 
     private void setupTable() {
-        // The TableView shows an ObservableList<Person>: add/remove a Person and the table updates.
         staffTable.setItems(service.getStaff());
 
         nameCol.setCellValueFactory(cell -> cell.getValue().nameProperty());
         genderCol.setCellValueFactory(cell -> cell.getValue().genderProperty());
         skillCol.setCellValueFactory(cell -> cell.getValue().skillLevelProperty());
         countryCol.setCellValueFactory(cell -> cell.getValue().countryProperty());
-        hobbiesCol.setCellValueFactory(cell -> cell.getValue().hobbiesProperty());
-        photoCol.setCellValueFactory(cell -> cell.getValue().photoFileProperty());
         dobCol.setCellValueFactory(cell -> {
             LocalDate date = cell.getValue().getDateOfBirth();
             return new SimpleStringProperty(date == null ? "" : date.format(DATE_FORMAT));
+        });
+
+        // Photo column: show actual ImageView with the photo
+        photoCol.setCellValueFactory(cell -> cell.getValue().photoFileProperty());
+        photoCol.setCellFactory(col -> new TableCell<Person, String>() {
+            private final ImageView imgView = new ImageView();
+            private final javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(48, 48);
+
+            {
+                imgView.setFitWidth(48);
+                imgView.setFitHeight(48);
+                imgView.setPreserveRatio(true);
+                imgView.setSmooth(true);
+                clip.setArcWidth(16);
+                clip.setArcHeight(16);
+                imgView.setClip(clip);
+                setAlignment(javafx.geometry.Pos.CENTER);
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            }
+
+            @Override
+            protected void updateItem(String photoUri, boolean empty) {
+                super.updateItem(photoUri, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    imgView.setImage(null);
+                    setGraphic(null);
+                } else {
+                    Image img = resolveStaffPhoto(photoUri);
+                    imgView.setImage(img);
+                    setGraphic(imgView);
+                }
+            }
         });
     }
 
@@ -122,21 +129,19 @@ public class StaffController implements Initializable {
 
     // ================================================================= RADIO BUTTONS
 
-    /** Gender: the 3 RadioButtons share one ToggleGroup (defined in the FXML) -> only one can be selected. */
     private void setupGender() {
-        genderLabel.setText("Selected gender: (none)");
+        genderLabel.setText("Selected: (none)");
         genderGroup.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
             if (newToggle == null) {
-                genderLabel.setText("Selected gender: (none)");
+                genderLabel.setText("Selected: (none)");
             } else {
-                genderLabel.setText("Selected gender: " + ((RadioButton) newToggle).getText());
+                genderLabel.setText("Selected: " + ((RadioButton) newToggle).getText());
             }
         });
     }
 
-    /** Skill level: Beginner / Intermediate / Expert in a second ToggleGroup. */
     private void setupSkillLevel() {
-        beginnerRadio.setSelected(true);   // default value
+        beginnerRadio.setSelected(true);
     }
 
     // ================================================================= COMBOBOX
@@ -156,7 +161,6 @@ public class StaffController implements Initializable {
     private void setupDatePicker() {
         dobLabel.setText("Date of birth: (not selected)");
 
-        // a birthday cannot be in the future -> disable those days
         dobPicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -165,30 +169,10 @@ public class StaffController implements Initializable {
             }
         });
 
-        // show the chosen date in a Label using a DateTimeFormatter
         dobPicker.valueProperty().addListener((observable, oldDate, newDate) ->
                 dobLabel.setText(newDate == null
                         ? "Date of birth: (not selected)"
                         : "Date of birth: " + newDate.format(DATE_FORMAT)));
-    }
-
-    // ================================================================= PASSWORDFIELD
-
-    /** A PasswordField and a TextField share the same text; the button switches which one is visible. */
-    private void setupPassword() {
-        passwordPlainField.textProperty().bindBidirectional(passwordField.textProperty());
-    }
-
-    @FXML
-    private void onTogglePassword() {
-        boolean showPlain = !passwordPlainField.isVisible();
-
-        passwordPlainField.setVisible(showPlain);
-        passwordPlainField.setManaged(showPlain);
-        passwordField.setVisible(!showPlain);
-        passwordField.setManaged(!showPlain);
-
-        showPasswordButton.setText(showPlain ? "Hide" : "Show");
     }
 
     // ================================================================= FILECHOOSER + IMAGEVIEW
@@ -204,12 +188,12 @@ public class StaffController implements Initializable {
         if (file != null) {
             selectedPhotoUri = file.toURI().toString();
             selectedPhotoName = file.getName();
-            photoView.setImage(new Image(selectedPhotoUri, 90, 90, true, true));
+            photoView.setImage(new Image(selectedPhotoUri, 78, 78, true, true));
             photoNameLabel.setText(file.getName());
         }
     }
 
-    // ================================================================= SUBMIT (CheckBoxes)
+    // ================================================================= SUBMIT
 
     @FXML
     private void onSubmit() {
@@ -219,7 +203,6 @@ public class StaffController implements Initializable {
         String country = countryCombo.getValue();
         LocalDate dob = dobPicker.getValue();
 
-        // ---- simple validation
         if (name.isEmpty()) {
             AlertUtil.warning("Missing name", "Please type the staff member's name.");
             return;
@@ -236,34 +219,22 @@ public class StaffController implements Initializable {
             AlertUtil.warning("Missing date of birth", "Please pick a date of birth.");
             return;
         }
-        if (passwordField.getText().length() < 4) {
-            AlertUtil.warning("Weak password", "The password must have at least 4 characters.");
-            return;
-        }
 
-        // ---- CHECKBOXES: collect every ticked hobby and display them
-        List<CheckBox> hobbyBoxes = List.of(readingCheck, gamingCheck, travelingCheck);
-        String hobbies = hobbyBoxes.stream()
-                .filter(CheckBox::isSelected)
-                .map(CheckBox::getText)
-                .collect(Collectors.joining(", "));
-        if (hobbies.isEmpty()) {
-            hobbies = "None";
-        }
-        hobbiesLabel.setText("Selected hobbies: " + hobbies);
+        // Store the URI (not just the file name) so the table can load the image
+        String photoUriForTable = selectedPhotoUri != null ? selectedPhotoUri : "-";
 
-        // ---- create the Person model and add it to the ObservableList -> the table updates itself
         Person person = new Person(
                 name,
                 ((RadioButton) gender).getText(),
                 ((RadioButton) skill).getText(),
                 country,
                 dob,
-                hobbies,
-                selectedPhotoName == null ? "-" : selectedPhotoName);
+                "",  // hobbies removed
+                photoUriForTable);
         service.getStaff().add(person);
 
-        formMessageLabel.setText("Saved: " + name + " (password is not stored in this demo)");
+        formMessageLabel.setStyle("-fx-text-fill: #15803d;");
+        formMessageLabel.setText("✓ Staff member \"" + name + "\" added successfully.");
         clearForm();
     }
 
@@ -273,13 +244,32 @@ public class StaffController implements Initializable {
         beginnerRadio.setSelected(true);
         countryCombo.setValue(null);
         dobPicker.setValue(null);
-        readingCheck.setSelected(false);
-        gamingCheck.setSelected(false);
-        travelingCheck.setSelected(false);
-        passwordField.clear();
         photoView.setImage(null);
         photoNameLabel.setText("No photo chosen");
         selectedPhotoUri = null;
         selectedPhotoName = null;
+    }
+
+    private Image resolveStaffPhoto(String photoUri) {
+        if (photoUri == null || photoUri.isBlank() || "-".equals(photoUri)) {
+            URL def = getClass().getResource("/images/avatar.png");
+            return def != null ? new Image(def.toExternalForm(), 48, 48, true, true) : null;
+        }
+        try {
+            if (photoUri.startsWith("file:") || photoUri.startsWith("http:") || photoUri.startsWith("https:")) {
+                return new Image(photoUri, 48, 48, true, true);
+            }
+            File f = new File(photoUri);
+            if (f.exists() && f.isFile()) {
+                return new Image(f.toURI().toString(), 48, 48, true, true);
+            }
+            URL res = getClass().getResource(photoUri.startsWith("/") ? photoUri : "/images/" + photoUri);
+            if (res != null) {
+                return new Image(res.toExternalForm(), 48, 48, true, true);
+            }
+        } catch (Exception ignored) {
+        }
+        URL def = getClass().getResource("/images/avatar.png");
+        return def != null ? new Image(def.toExternalForm(), 48, 48, true, true) : null;
     }
 }

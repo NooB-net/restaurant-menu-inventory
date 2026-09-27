@@ -53,10 +53,6 @@ public final class UserService {
         if (username == null || username.trim().isEmpty()) {
             return new AuthResult(false, "Username cannot be empty. Please enter your username.", null);
         }
-        if (password == null || password.isEmpty()) {
-            return new AuthResult(false, "Password cannot be empty. Please enter your password.", null);
-        }
-
         String trimmedUser = username.trim();
         User user = findUser(trimmedUser);
         if (user == null) {
@@ -64,9 +60,15 @@ public final class UserService {
                     "Account not found: No user registered with username \"" + trimmedUser + "\".", null);
         }
 
-        if (!user.getPassword().equals(password)) {
-            return new AuthResult(false,
-                    "Incorrect password for \"" + trimmedUser + "\". Please verify and try again.", null);
+        // Only administrators require a password. Standard users do not need a password.
+        if (user.getRole() == Role.ADMIN) {
+            if (password == null || password.isEmpty()) {
+                return new AuthResult(false, "Password cannot be empty. Please enter your password.", null);
+            }
+            if (!user.getPassword().equals(password)) {
+                return new AuthResult(false,
+                        "Incorrect password for \"" + trimmedUser + "\". Please verify and try again.", null);
+            }
         }
 
         currentUser.set(user);
@@ -94,8 +96,8 @@ public final class UserService {
         if (findUser(username) != null) {
             return new AuthResult(false, "Username \"" + username + "\" is already taken.", null);
         }
-        if (password == null || password.length() < 4) {
-            return new AuthResult(false, "Password must be at least 4 characters long.", null);
+        if (password == null || (password.length() > 0 && password.length() < 4)) {
+            return new AuthResult(false, "Password must be at least 4 characters long (or leave blank for standard users).", null);
         }
         if (fullName == null || fullName.trim().isEmpty()) {
             return new AuthResult(false, "Full name is required.", null);
@@ -144,7 +146,7 @@ public final class UserService {
         // Normal User / Customer 1
         users.add(new User(
                 "user",
-                "user123",
+                "",
                 "Alex Morgan",
                 Role.USER,
                 "alex.morgan@example.com",
@@ -159,7 +161,7 @@ public final class UserService {
         // Normal User / Customer 2
         users.add(new User(
                 "ayesha",
-                "user123",
+                "",
                 "Ayesha Rahman",
                 Role.USER,
                 "ayesha.r@example.com",

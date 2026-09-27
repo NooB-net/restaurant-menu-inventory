@@ -50,18 +50,9 @@ public class InventoryController implements Initializable {
     @FXML private TextField restockField;
     @FXML private Label restockMessageLabel;
 
-    // Accumulate / progress panel
-    @FXML private TextField targetField;
-    @FXML private Label sumLabel;
-    @FXML private Label pressesLabel;
-    @FXML private ProgressBar progressBar;
-
     private final InventoryService service = InventoryService.getInstance();
     private final ObservableList<Ingredient> purchaseItems = FXCollections.observableArrayList();
 
-    // State of the Accumulate demo
-    private double currentSum = 0;
-    private int pressCount = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -94,11 +85,6 @@ public class InventoryController implements Initializable {
         });
 
         service.stockVersionProperty().addListener((obs, oldVal, newVal) -> refreshPurchaseList());
-
-        // Default values for Accumulate panel
-        sumLabel.setText("Current sum: 0");
-        pressesLabel.setText("Presses: 0");
-        progressBar.setProgress(0);
     }
 
     // ================================================================= WARNING SYSTEM
@@ -188,19 +174,29 @@ public class InventoryController implements Initializable {
 
     private TableCell<Ingredient, String> statusCell() {
         return new TableCell<>() {
+            private final Label pill = new Label();
+            {
+                pill.setStyle("-fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
+                setGraphic(pill);
+                setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+                setAlignment(javafx.geometry.Pos.CENTER);
+            }
+
             @Override
             protected void updateItem(String status, boolean empty) {
                 super.updateItem(status, empty);
+                // Always clear cell background so selection highlight works correctly
+                setStyle("-fx-background-color: transparent;");
                 if (empty || status == null) {
-                    setText(null);
-                    setStyle("");
+                    pill.setText(null);
+                    pill.setStyle("-fx-background-color: transparent;");
                     return;
                 }
-                setText(status);
+                pill.setText(status);
                 switch (status) {
-                    case "OUT OF STOCK" -> setStyle("-fx-text-fill: white; -fx-background-color: #dc2626; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                    case "LOW"          -> setStyle("-fx-text-fill: #92400e; -fx-background-color: #fef3c7; -fx-font-weight: bold; -fx-alignment: CENTER;");
-                    default             -> setStyle("-fx-text-fill: #15803d; -fx-background-color: #dcfce7; -fx-font-weight: bold; -fx-alignment: CENTER;");
+                    case "OUT OF STOCK" -> pill.setStyle("-fx-text-fill: white; -fx-background-color: #dc2626; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
+                    case "LOW"          -> pill.setStyle("-fx-text-fill: #92400e; -fx-background-color: #fef3c7; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
+                    default             -> pill.setStyle("-fx-text-fill: #15803d; -fx-background-color: #dcfce7; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
                 }
             }
         };
@@ -274,45 +270,4 @@ public class InventoryController implements Initializable {
                 "Successfully purchased and restocked " + count + " shortage items!\nAll ingredients now meet safe kitchen levels.");
     }
 
-    // ================================================================= PROGRESSBAR DEMO
-
-    @FXML
-    private void onAccumulate() {
-        double number;
-        try {
-            number = Double.parseDouble(targetField.getText().trim());
-        } catch (NumberFormatException e) {
-            AlertUtil.error("Invalid Number", "Type a whole number in the box first (for example 5).");
-            return;
-        }
-        int target = (int) number;
-        if (number != target || target < 1) {
-            AlertUtil.error("Invalid Number", "Please enter a whole number of 1 or more.");
-            return;
-        }
-        if (pressCount >= target) {
-            AlertUtil.info("Already Complete", "The progress bar is already full. Press Reset to start again.");
-            return;
-        }
-
-        pressCount++;
-        currentSum += number;
-
-        sumLabel.setText("Current sum: " + Ingredient.formatAmount(currentSum));
-        pressesLabel.setText("Presses: " + pressCount + " / " + target);
-        progressBar.setProgress((double) pressCount / target);
-
-        if (pressCount == target) {
-            AlertUtil.info("Done", "The progress bar is full after " + target + " presses.");
-        }
-    }
-
-    @FXML
-    private void onResetAccumulate() {
-        currentSum = 0;
-        pressCount = 0;
-        sumLabel.setText("Current sum: 0");
-        pressesLabel.setText("Presses: 0");
-        progressBar.setProgress(0);
-    }
 }

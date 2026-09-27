@@ -35,7 +35,6 @@ import java.util.ResourceBundle;
 public class OrderController implements Initializable {
 
     // ---- injected from OrderView.fxml
-    @FXML private HBox quickBar;
     @FXML private HBox actionBar;
     @FXML private ListView<Dish> dishList;
     @FXML private ListView<String> historyList;
@@ -88,7 +87,6 @@ public class OrderController implements Initializable {
         historyList.setItems(service.getOrderHistory());
 
         setupRecipeTable();
-        buildQuickSearchBar();
         buildActionButtons();
 
         // Bottom label always shows what is out of stock
@@ -221,49 +219,7 @@ public class OrderController implements Initializable {
 
     // ================================================================= EVENT HANDLING FROM CODE
 
-    private void buildQuickSearchBar() {
-        Label title = new Label("Quick find:");
-        title.getStyleClass().add("field-label");
 
-        TextField searchField = new TextField();
-        searchField.setPromptText("Type dish name and press Enter");
-        searchField.setPrefWidth(260);
-        searchField.getStyleClass().add("modern-input");
-
-        Label resultLabel = new Label();
-        resultLabel.getStyleClass().add("info-label");
-
-        searchField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                String text = searchField.getText().trim().toLowerCase();
-                if (text.isEmpty()) {
-                    resultLabel.setText("Type something first.");
-                    return;
-                }
-                Dish found = service.getDishes().stream()
-                        .filter(dish -> dish.getName().toLowerCase().contains(text))
-                        .findFirst()
-                        .orElse(null);
-                if (found == null) {
-                    resultLabel.setText("No dish matches \"" + text + "\".");
-                } else {
-                    dishList.getSelectionModel().select(found);
-                    dishList.scrollTo(found);
-                    resultLabel.setText("Found: " + found.getName());
-                }
-            }
-        });
-
-        Button clearButton = new Button("Clear");
-        clearButton.getStyleClass().add("secondary-btn");
-        clearButton.setOnAction(event -> {
-            searchField.clear();
-            resultLabel.setText("");
-            searchField.requestFocus();
-        });
-
-        quickBar.getChildren().addAll(title, searchField, clearButton, resultLabel);
-    }
 
     private void buildActionButtons() {
         Button checkAvailabilityBtn = new Button("Check Availability");
@@ -514,18 +470,27 @@ public class OrderController implements Initializable {
         });
 
         recStatusCol.setCellFactory(column -> new TableCell<>() {
+            private final Label pill = new Label();
+            {
+                pill.setStyle("-fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
+                setGraphic(pill);
+                setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+                setAlignment(javafx.geometry.Pos.CENTER);
+            }
+
             @Override
             protected void updateItem(String status, boolean empty) {
                 super.updateItem(status, empty);
+                setStyle("-fx-background-color: transparent;");
                 if (empty || status == null) {
-                    setText(null);
-                    setStyle("");
+                    pill.setText(null);
+                    pill.setStyle("-fx-background-color: transparent;");
                 } else {
-                    setText(status);
+                    pill.setText(status);
                     if ("OK".equals(status)) {
-                        setStyle("-fx-text-fill: #15803d; -fx-font-weight: bold; -fx-background-color: #dcfce7;");
+                        pill.setStyle("-fx-text-fill: #15803d; -fx-font-weight: bold; -fx-background-color: #dcfce7; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
                     } else {
-                        setStyle("-fx-text-fill: #b91c1c; -fx-font-weight: bold; -fx-background-color: #fee2e2;");
+                        pill.setStyle("-fx-text-fill: #b91c1c; -fx-font-weight: bold; -fx-background-color: #fee2e2; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
                     }
                 }
             }

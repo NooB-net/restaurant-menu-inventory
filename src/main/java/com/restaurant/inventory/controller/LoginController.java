@@ -23,6 +23,8 @@ import java.util.ResourceBundle;
 /**
  * Controller for the Login and Registration View.
  * Handles role-based authentication (Admin vs Standard User) and input validation warnings.
+ * Only administrators can create new accounts (password-protected action).
+ * Users do not need a password — username alone is sufficient for login.
  */
 public class LoginController implements Initializable {
 
@@ -35,11 +37,11 @@ public class LoginController implements Initializable {
     @FXML private HBox warningBanner;
     @FXML private Label warningLabel;
 
-    // Registration expandable panel
-    @FXML private VBox registerPane;
+    // Admin-only account creation panel
+    @FXML private VBox adminCreateSection;
+    @FXML private PasswordField adminAuthField;
     @FXML private TextField regUsernameField;
     @FXML private TextField regFullNameField;
-    @FXML private PasswordField regPasswordField;
     @FXML private ComboBox<String> regRoleCombo;
     @FXML private Label regMessageLabel;
 
@@ -66,7 +68,7 @@ public class LoginController implements Initializable {
 
         // Enter key to login
         usernameField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) passwordField.requestFocus();
+            if (event.getCode() == KeyCode.ENTER) onLogin();
         });
         passwordField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) onLogin();
@@ -76,42 +78,52 @@ public class LoginController implements Initializable {
         });
     }
 
+    /**
+     * Login logic:
+     * - Administrators require a password.
+     * - Standard users log in with username only (no password required).
+     */
     @FXML
     private void onLogin() {
         String username = usernameField.getText().trim();
-        String password = passwordField.getText();
 
-        // 1. Validate empty inputs with prominent warning messages
         if (username.isEmpty()) {
             showWarning("Warning: Username cannot be empty. Please enter your username.");
             usernameField.setStyle("-fx-border-color: #ef4444; -fx-border-width: 1.5px;");
             usernameField.requestFocus();
-            AlertUtil.warning("Login Input Warning", "Please enter your username to proceed.");
             return;
         }
 
-        if (password.isEmpty()) {
-            showWarning("Warning: Password cannot be empty. Please enter your password.");
-            passwordField.setStyle("-fx-border-color: #ef4444; -fx-border-width: 1.5px;");
-            passwordField.requestFocus();
-            AlertUtil.warning("Login Input Warning", "Please enter your password to proceed.");
+        // Find the user first
+        User user = userService.findUser(username);
+
+        if (user == null) {
+            showWarning("Warning: No account found with username \"" + username + "\".");
+            usernameField.setStyle("-fx-border-color: #ef4444; -fx-border-width: 1.5px;");
+            usernameField.requestFocus();
             return;
         }
 
-        // 2. Authenticate
-        UserService.AuthResult result = userService.authenticate(username, password);
-        if (!result.success()) {
-            showWarning("Warning: " + result.message());
-            if (result.message().toLowerCase().contains("not found") || result.message().toLowerCase().contains("no user")) {
-                usernameField.setStyle("-fx-border-color: #ef4444; -fx-border-width: 1.5px;");
-            } else {
+        // Admins require a password; users do not
+        if (user.getRole() == Role.ADMIN) {
+            String password = passwordField.getText();
+            if (password.isEmpty()) {
+                showWarning("Warning: Administrator account requires a password.");
                 passwordField.setStyle("-fx-border-color: #ef4444; -fx-border-width: 1.5px;");
+                passwordField.requestFocus();
+                return;
             }
-            AlertUtil.warning("Authentication Failed", result.message());
-            return;
+            UserService.AuthResult result = userService.authenticate(username, password);
+            if (!result.success()) {
+                showWarning("Warning: " + result.message());
+                passwordField.setStyle("-fx-border-color: #ef4444; -fx-border-width: 1.5px;");
+                return;
+            }
+        } else {
+            // Standard user: login without password
+            userService.setCurrentUser(user);
         }
 
-        // 3. Successful login
         hideWarning();
         Main.showMainView();
     }
@@ -126,65 +138,78 @@ public class LoginController implements Initializable {
         showPasswordBtn.setText(show ? "Hide" : "Show");
     }
 
-    @FXML
-    private void onFillAdmin() {
-        usernameField.setText("admin");
-        passwordField.setText("admin123");
-        hideWarning();
-        onLogin();
-    }
-
-    @FXML
-    private void onFillUser() {
-        usernameField.setText("user");
-        passwordField.setText("user123");
-        hideWarning();
-        onLogin();
-    }
-
+    /** Show / hide the admin-only create account panel. */
     @FXML
     private void onToggleRegister() {
-        boolean isVisible = !registerPane.isVisible();
-        registerPane.setVisible(isVisible);
-        registerPane.setManaged(isVisible);
+        boolean isVisible = !adminCreateSection.isVisible();
+        adminCreateSection.setVisible(isVisible);
+        adminCreateSection.setManaged(isVisible);
         if (isVisible) {
             regMessageLabel.setText("");
+            adminAuthField.clear();
         }
     }
 
     @FXML
-    private void onRegister() {
-        String u = regUsernameField.getText().trim();
-        String name = regFullNameField.getText().trim();
-        String pass = regPasswordField.getText();
-        String roleStr = regRoleCombo.getValue();
-        Role role = "Administrator".equalsIgnoreCase(roleStr) ? Role.ADMIN : Role.USER;
+    private void onCancelCreate() {
+        adminCreateSection.setVisible(false);
+        adminCreateSection.setManaged(false);
+        regMessageLabel.setText("");
+    }
 
-        if (u.isEmpty() || name.isEmpty() || pass.isEmpty()) {
+    /**
+     * Admin creates a new account.
+     * Requires admin password verification before creating any account.
+     * The new user account does NOT need a password (users login with username only).
+     */
+    @FXML
+    private void onRegister() {
+        // 1. Verify admin password
+        String adminPassword = adminAuthField.getText();
+        User adminUser = userService.findUser("admin");
+        if (adminUser == null || !adminUser.getPassword().equals(adminPassword)) {
             regMessageLabel.setStyle("-fx-text-fill: #ef4444;");
-            regMessageLabel.setText("Please fill out all registration fields.");
+            regMessageLabel.setText("❌ Incorrect admin password. Only administrators can create accounts.");
             return;
         }
 
+        String u = regUsernameField.getText().trim();
+        String name = regFullNameField.getText().trim();
+        String roleStr = regRoleCombo.getValue();
+        Role role = "Administrator".equalsIgnoreCase(roleStr) ? Role.ADMIN : Role.USER;
+
+        if (u.isEmpty() || name.isEmpty()) {
+            regMessageLabel.setStyle("-fx-text-fill: #ef4444;");
+            regMessageLabel.setText("Please fill out all fields.");
+            return;
+        }
+
+        if (userService.findUser(u) != null) {
+            regMessageLabel.setStyle("-fx-text-fill: #ef4444;");
+            regMessageLabel.setText("Username \"" + u + "\" is already taken.");
+            return;
+        }
+
+        // Admin accounts get a default password; user accounts get a blank password (no login password needed)
+        String newPassword = (role == Role.ADMIN) ? "admin123" : "";
+
         UserService.AuthResult res = userService.register(
-                u, pass, name, role,
+                u, newPassword, name, role,
                 u + "@example.com", "", "United States",
-                LocalDate.of(1995, 1, 1), "Other", "Registered member", "salad.png"
+                LocalDate.of(1995, 1, 1), "Other", "Member", "salad.png"
         );
 
         if (res.success()) {
             regMessageLabel.setStyle("-fx-text-fill: #16a34a;");
-            regMessageLabel.setText("Account created! You can now log in.");
-            usernameField.setText(u);
-            passwordField.setText(pass);
-            registerPane.setVisible(false);
-            registerPane.setManaged(false);
-            AlertUtil.info("Registration Success", "Account created successfully for " + name + "! Logging you in...");
-            onLogin();
+            regMessageLabel.setText("✓ Account created for " + name + "!");
+            regUsernameField.clear();
+            regFullNameField.clear();
+            adminAuthField.clear();
+            AlertUtil.info("Account Created", "Account created successfully for " + name + ".\n"
+                    + (role == Role.ADMIN ? "Default admin password: admin123" : "User can log in with username only."));
         } else {
             regMessageLabel.setStyle("-fx-text-fill: #ef4444;");
             regMessageLabel.setText(res.message());
-            AlertUtil.warning("Registration Warning", res.message());
         }
     }
 

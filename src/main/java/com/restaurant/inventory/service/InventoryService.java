@@ -284,10 +284,10 @@ public final class InventoryService {
                 .needs(mango, 1).needs(orange, 1).needs(apple, 1));
 
         staff.add(new Person("Rahim Uddin", "Male", "Expert", "Bangladesh",
-                LocalDate.of(1985, 4, 12), "Reading, Traveling", "-"));
+                LocalDate.of(1985, 4, 12), "", "burger.png"));
         staff.add(new Person("Ayesha Rahman", "Female", "Intermediate", "Bangladesh",
-                LocalDate.of(1994, 9, 3), "Gaming", "-"));
+                LocalDate.of(1994, 9, 3), "", "dessert.png"));
         staff.add(new Person("John Smith", "Male", "Beginner", "United Kingdom",
-                LocalDate.of(2001, 1, 20), "Traveling", "-"));
+                LocalDate.of(2001, 1, 20), "", "salad.png"));
     }
 }

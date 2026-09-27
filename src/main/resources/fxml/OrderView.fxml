@@ -18,14 +18,11 @@
             <padding>
                 <Insets bottom="12"/>
             </padding>
-            <HBox spacing="14" alignment="CENTER_LEFT">
-                <HBox fx:id="quickBar" spacing="10" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"/>
-                <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Label text="Category:" styleClass="field-label"/>
-                    <ComboBox fx:id="categoryFilterCombo" prefWidth="140" styleClass="modern-combo"/>
-                    <Label text="Filter:" styleClass="field-label"/>
-                    <ComboBox fx:id="stockFilterCombo" prefWidth="140" styleClass="modern-combo"/>
-                </HBox>
+            <HBox spacing="14" alignment="CENTER_RIGHT">
+                <Label text="Category:" styleClass="field-label"/>
+                <ComboBox fx:id="categoryFilterCombo" prefWidth="140" styleClass="modern-combo"/>
+                <Label text="Filter:" styleClass="field-label"/>
+                <ComboBox fx:id="stockFilterCombo" prefWidth="140" styleClass="modern-combo"/>
             </HBox>
         </VBox>
     </top>
