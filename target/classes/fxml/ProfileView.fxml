@@ -32,10 +32,8 @@
                     <ImageView fx:id="avatarView" fitWidth="120" fitHeight="120" preserveRatio="true"/>
                 </StackPane>
 
-                <HBox spacing="8" alignment="CENTER">
-                    <Button text="Change Photo..." onAction="#onBrowseAvatar" styleClass="secondary-btn"/>
-                    <Button text="Reset" onAction="#onRemoveAvatar" styleClass="secondary-btn"/>
-                </HBox>
+                <!-- Reset avatar only (no file browse button) -->
+                <!-- Reset photo button removed per user request -->
 
                 <VBox spacing="4" alignment="CENTER">
                     <Label fx:id="displayNameLabel" styleClass="profile-name-label"/>
@@ -92,17 +90,26 @@
                         <DatePicker fx:id="dobPicker" maxWidth="Infinity" styleClass="modern-date-picker"/>
                     </VBox>
 
-                    <!-- Gender -->
+                    <!-- Gender (names above radio buttons) -->
                     <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="2">
                         <Label text="Gender" styleClass="field-label"/>
-                        <HBox spacing="12" alignment="CENTER_LEFT">
-                            <RadioButton fx:id="maleRadio" text="Male">
-                                <toggleGroup>
-                                    <ToggleGroup fx:id="genderGroup"/>
-                                </toggleGroup>
-                            </RadioButton>
-                            <RadioButton fx:id="femaleRadio" text="Female" toggleGroup="$genderGroup"/>
-                            <RadioButton fx:id="otherRadio" text="Other" toggleGroup="$genderGroup"/>
+                        <HBox spacing="24" alignment="CENTER_LEFT">
+                            <VBox spacing="3" alignment="CENTER">
+                                <Label text="Male" styleClass="gender-selection-hint"/>
+                                <RadioButton fx:id="maleRadio">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="genderGroup"/>
+                                    </toggleGroup>
+                                </RadioButton>
+                            </VBox>
+                            <VBox spacing="3" alignment="CENTER">
+                                <Label text="Female" styleClass="gender-selection-hint"/>
+                                <RadioButton fx:id="femaleRadio" toggleGroup="$genderGroup"/>
+                            </VBox>
+                            <VBox spacing="3" alignment="CENTER">
+                                <Label text="Other" styleClass="gender-selection-hint"/>
+                                <RadioButton fx:id="otherRadio" toggleGroup="$genderGroup"/>
+                            </VBox>
                         </HBox>
                     </VBox>
                 </GridPane>
@@ -115,30 +122,33 @@
 
                 <Separator/>
 
-                <!-- Section 2: Security & Password -->
-                <Label text="Change Password (Optional)" styleClass="card-section-title"/>
-                <GridPane hgap="14" vgap="12">
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="33.3"/>
-                        <ColumnConstraints percentWidth="33.3"/>
-                        <ColumnConstraints percentWidth="33.3"/>
-                    </columnConstraints>
+                <!-- Section 2: Security & Password (Admins only) -->
+                <VBox fx:id="passwordSection" spacing="12">
+                    <Label text="Change Password (Optional)" styleClass="card-section-title"/>
+                    <GridPane hgap="14" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.3"/>
+                            <ColumnConstraints percentWidth="33.3"/>
+                            <ColumnConstraints percentWidth="33.3"/>
+                        </columnConstraints>
 
-                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                        <Label text="Current Password" styleClass="field-label"/>
-                        <PasswordField fx:id="currentPasswordField" promptText="Verify old password" styleClass="modern-input"/>
-                    </VBox>
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Current Password" styleClass="field-label"/>
+                            <PasswordField fx:id="currentPasswordField" promptText="Verify old password" styleClass="modern-input"/>
+                        </VBox>
 
-                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                        <Label text="New Password" styleClass="field-label"/>
-                        <PasswordField fx:id="newPasswordField" promptText="At least 4 characters" styleClass="modern-input"/>
-                    </VBox>
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="New Password" styleClass="field-label"/>
+                            <PasswordField fx:id="newPasswordField" promptText="At least 4 characters" styleClass="modern-input"/>
+                        </VBox>
 
-                    <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                        <Label text="Confirm New Password" styleClass="field-label"/>
-                        <PasswordField fx:id="confirmPasswordField" promptText="Repeat new password" styleClass="modern-input"/>
-                    </VBox>
-                </GridPane>
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Confirm New Password" styleClass="field-label"/>
+                            <PasswordField fx:id="confirmPasswordField" promptText="Repeat new password" styleClass="modern-input"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
 
                 <!-- Feedback & Action Buttons -->
                 <HBox spacing="14" alignment="CENTER_LEFT">
