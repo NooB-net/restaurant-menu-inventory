@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3504aa61-08d5-4e7f-87f1-ebea7db2faf1" name="Changes" comment="Merge branch 'master' into final-ver&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/com/restaurant/inventory/controller/LoginController.java&#10;#&#9;src/main/java/com/restaurant/inventory/controller/ProfileController.java&#10;#&#9;src/main/java/com/restaurant/inventory/model/User.java&#10;#&#9;src/main/java/com/restaurant/inventory/service/UserService.java&#10;#&#9;src/main/resources/fxml/LoginView.fxml&#10;#&#9;src/main/resources/fxml/ProfileView.fxml&#10;#&#9;src/test/java/com/restaurant/inventory/RestaurantAppTest.java">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="3504aa61-08d5-4e7f-87f1-ebea7db2faf1" name="Changes" comment="fixed most bugs" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,7 +23,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="v2" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -48,61 +46,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="4.291245261868962E-15" />
-      <entry key="MS500" value="0.002245658137896961" />
-      <entry key="S2" value="0.5339147731531623" />
-      <entry key="S5" value="2.5763792405679165" />
-      <entry key="S10" value="4.734816777030941" />
-      <entry key="S30" value="8.567972201217563" />
-      <entry key="S60" value="12.825864777510764" />
-      <entry key="M2" value="17.514240134134077" />
-      <entry key="M5" value="21.982689983960405" />
-      <entry key="M10" value="23.869248954884743" />
-      <entry key="M15" value="24.55082123691276" />
-      <entry key="M30" value="25.260664362075655" />
-      <entry key="H1" value="25.626591204986962" />
-      <entry key="H2" value="25.820806106481673" />
-      <entry key="H4" value="26.0935690437457" />
-      <entry key="D1" value="29.336579417335535" />
-      <entry key="W1" value="33.5823962183194" />
+      <entry key="MS100" value="8.909995845767164E-8" />
+      <entry key="MS500" value="0.03902424101685982" />
+      <entry key="S2" value="0.647731136126175" />
+      <entry key="S5" value="2.394293334192279" />
+      <entry key="S10" value="4.46104828678099" />
+      <entry key="S30" value="7.068967687956624" />
+      <entry key="S60" value="7.96939587885655" />
+      <entry key="M2" value="8.467723796223435" />
+      <entry key="M5" value="9.013413409568424" />
+      <entry key="M10" value="11.064966791507745" />
+      <entry key="M15" value="14.068631949984729" />
+      <entry key="M30" value="22.464750372727607" />
+      <entry key="H1" value="31.87293981506907" />
+      <entry key="H2" value="39.14570565593942" />
+      <entry key="H4" value="43.849304298308134" />
+      <entry key="D1" value="51.31565078231446" />
+      <entry key="W1" value="56.41776783313495" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0000705986440372" />
-      <entry key="S2" value="1.0916640601623573" />
-      <entry key="S5" value="1.3844852078175671" />
-      <entry key="S10" value="1.6200687121743584" />
-      <entry key="S30" value="1.8527333977029858" />
-      <entry key="S60" value="1.9234356489236193" />
-      <entry key="M2" value="1.9609555915460501" />
-      <entry key="M5" value="1.9841953918391415" />
-      <entry key="M10" value="1.9920662235149131" />
-      <entry key="M15" value="1.9947037970329302" />
-      <entry key="M30" value="1.997348382980055" />
-      <entry key="H1" value="1.9986733114387583" />
-      <entry key="H2" value="1.9993364355604966" />
-      <entry key="H4" value="1.9996681627222588" />
-      <entry key="D1" value="1.999944686138549" />
-      <entry key="W1" value="1.9999920978324626" />
+      <entry key="MS100" value="1.0000000000019227" />
+      <entry key="MS500" value="1.0045371434840848" />
+      <entry key="S2" value="1.2595348176357644" />
+      <entry key="S5" value="1.5830130169517616" />
+      <entry key="S10" value="1.763552890736301" />
+      <entry key="S30" value="1.914000377759334" />
+      <entry key="S60" value="1.9560336697833052" />
+      <entry key="M2" value="1.9777697453532126" />
+      <entry key="M5" value="1.991608461370538" />
+      <entry key="M10" value="2.028997334629049" />
+      <entry key="M15" value="2.127893883538494" />
+      <entry key="M30" value="2.510140227683207" />
+      <entry key="H1" value="3.0108215892380974" />
+      <entry key="H2" value="3.4219970432619276" />
+      <entry key="H4" value="3.6864493394407942" />
+      <entry key="D1" value="3.94396426071493" />
+      <entry key="W1" value="3.991897180321442" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="3.5102373180136613E-6" />
-      <entry key="MS500" value="0.08296176266455658" />
-      <entry key="S2" value="1.086213172885046" />
-      <entry key="S5" value="3.6042144656680746" />
-      <entry key="S10" value="6.122716960490167" />
-      <entry key="S30" value="10.316220514067075" />
-      <entry key="S60" value="14.68335654008766" />
-      <entry key="M2" value="19.43499297394249" />
-      <entry key="M5" value="23.948113182517044" />
-      <entry key="M10" value="25.851367775171752" />
-      <entry key="M15" value="26.538758793229604" />
-      <entry key="M30" value="27.254559658494284" />
-      <entry key="H1" value="27.6235199681738" />
-      <entry key="H2" value="27.819265672069758" />
-      <entry key="H4" value="28.09279735402637" />
-      <entry key="D1" value="31.336449724930038" />
-      <entry key="W1" value="35.58237739254464" />
+      <entry key="MS100" value="1.0634594532763923E-4" />
+      <entry key="MS500" value="0.19873642705899555" />
+      <entry key="S2" value="1.4124659005097393" />
+      <entry key="S5" value="3.668357407780584" />
+      <entry key="S10" value="6.035067723750601" />
+      <entry key="S30" value="8.908968909311495" />
+      <entry key="S60" value="9.88681637874126" />
+      <entry key="M2" value="10.425760278614973" />
+      <entry key="M5" value="10.997006540139356" />
+      <entry key="M10" value="13.089735450801934" />
+      <entry key="M15" value="16.193341009533448" />
+      <entry key="M30" value="24.972604569458372" />
+      <entry key="H1" value="34.88216519972856" />
+      <entry key="H2" value="42.56671825229429" />
+      <entry key="H4" value="47.535201197835725" />
+      <entry key="D1" value="55.25951233511064" />
+      <entry key="W1" value="60.4096497854033" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -114,29 +112,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.restaurant-menu-inventory [org.openjfx:javafx-maven-plugin:0.0.8:run].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;final-ver&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/LAPTOP 3/Downloads/restaurant-menu-inventory&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.AcpAgentsConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Maven.restaurant-menu-inventory [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "final-final-ver",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/LAPTOP 3/Downloads/restaurant-menu-inventory",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "ml.llm.AcpAgentsConfigurable"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -158,13 +156,25 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Basic Structure" />
     <MESSAGE value="Edited version" />
     <MESSAGE value="v2" />
     <MESSAGE value="edited" />
     <MESSAGE value="Merge branch 'master' into final-ver&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/com/restaurant/inventory/controller/LoginController.java&#10;#&#9;src/main/java/com/restaurant/inventory/controller/ProfileController.java&#10;#&#9;src/main/java/com/restaurant/inventory/model/User.java&#10;#&#9;src/main/java/com/restaurant/inventory/service/UserService.java&#10;#&#9;src/main/resources/fxml/LoginView.fxml&#10;#&#9;src/main/resources/fxml/ProfileView.fxml&#10;#&#9;src/test/java/com/restaurant/inventory/RestaurantAppTest.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'master' into final-ver&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/com/restaurant/inventory/controller/LoginController.java&#10;#&#9;src/main/java/com/restaurant/inventory/controller/ProfileController.java&#10;#&#9;src/main/java/com/restaurant/inventory/model/User.java&#10;#&#9;src/main/java/com/restaurant/inventory/service/UserService.java&#10;#&#9;src/main/resources/fxml/LoginView.fxml&#10;#&#9;src/main/resources/fxml/ProfileView.fxml&#10;#&#9;src/test/java/com/restaurant/inventory/RestaurantAppTest.java" />
+    <MESSAGE value="fixed most bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed most bugs" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
