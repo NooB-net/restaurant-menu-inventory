@@ -17,7 +17,8 @@ public class IngredientDao implements GenericDao<Ingredient, String> {
 
     @Override
     public void create(Ingredient entity) {
-        String sql = "INSERT OR REPLACE INTO ingredients (name, unit, quantity, min_level, default_quantity) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ingredients (name, unit, quantity, min_level, default_quantity) VALUES (?, ?, ?, ?, ?) " +
+                "ON CONFLICT(name) DO UPDATE SET unit = excluded.unit, quantity = excluded.quantity, min_level = excluded.min_level, default_quantity = excluded.default_quantity";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, entity.getName());
@@ -26,6 +27,28 @@ public class IngredientDao implements GenericDao<Ingredient, String> {
             pstmt.setDouble(4, entity.getMinLevel());
             pstmt.setDouble(5, entity.getDefaultQuantity());
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveAll(List<Ingredient> list) {
+        String sql = "INSERT INTO ingredients (name, unit, quantity, min_level, default_quantity) VALUES (?, ?, ?, ?, ?) " +
+                "ON CONFLICT(name) DO UPDATE SET unit = excluded.unit, quantity = excluded.quantity, min_level = excluded.min_level, default_quantity = excluded.default_quantity";
+        try (Connection conn = DatabaseManager.getConnection()) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                for (Ingredient entity : list) {
+                    pstmt.setString(1, entity.getName());
+                    pstmt.setString(2, entity.getUnit());
+                    pstmt.setDouble(3, entity.getQuantity());
+                    pstmt.setDouble(4, entity.getMinLevel());
+                    pstmt.setDouble(5, entity.getDefaultQuantity());
+                    pstmt.addBatch();
+                }
+                pstmt.executeBatch();
+            }
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

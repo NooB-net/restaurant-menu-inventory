@@ -71,23 +71,26 @@ public class Ingredient implements Identifiable {
 
     /** True if stock is out of stock or low and needs purchasing. */
     public boolean needsPurchase() {
-        return getQuantity() <= getMinLevel();
+        return isOutOfStock() || getQuantity() <= getMinLevel();
     }
 
     /** How much is needed just to reach the minimum safe threshold. */
     public double getDeficit() {
+        if (isOutOfStock()) {
+            return Math.max(getMinLevel(), 1.0);
+        }
         return Math.max(0, getMinLevel() - getQuantity());
     }
 
     /** Suggested quantity to purchase to reach a healthy stock level. */
     public double getSuggestedPurchase() {
         if (isOutOfStock()) {
-            return Math.max(getDefaultQuantity(), getMinLevel() * 2);
+            return Math.max(getDefaultQuantity(), Math.max(getMinLevel() * 2, 1.0));
         }
         if (isLow()) {
             return Math.max(getDefaultQuantity() - getQuantity(), getMinLevel());
         }
-        return 0;
+        return Math.max(getDefaultQuantity() - getQuantity(), Math.max(getMinLevel(), 1.0));
     }
 
     /** Removes stock (never goes below zero). */

@@ -153,7 +153,16 @@ public class InventoryController implements Initializable {
         purMinCol.setCellValueFactory(cell -> cell.getValue().minLevelProperty());
         purDeficitCol.setCellValueFactory(cell -> new SimpleDoubleProperty(cell.getValue().getDeficit()));
         purSuggestedCol.setCellValueFactory(cell -> new SimpleDoubleProperty(cell.getValue().getSuggestedPurchase()));
-        purStatusCol.setCellValueFactory(cell -> cell.getValue().statusProperty());
+        purStatusCol.setCellValueFactory(cell -> {
+            Ingredient ing = cell.getValue();
+            if (ing.isOutOfStock()) {
+                return new javafx.beans.property.SimpleStringProperty("OUT OF STOCK");
+            } else if (ing.isLow()) {
+                return new javafx.beans.property.SimpleStringProperty("LOW");
+            } else {
+                return new javafx.beans.property.SimpleStringProperty("SHORTAGE");
+            }
+        });
 
         purStockCol.setCellFactory(column -> numberCell());
         purMinCol.setCellFactory(column -> numberCell());
@@ -196,6 +205,7 @@ public class InventoryController implements Initializable {
                 switch (status) {
                     case "OUT OF STOCK" -> pill.setStyle("-fx-text-fill: white; -fx-background-color: #dc2626; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
                     case "LOW"          -> pill.setStyle("-fx-text-fill: #92400e; -fx-background-color: #fef3c7; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
+                    case "SHORTAGE"     -> pill.setStyle("-fx-text-fill: #b91c1c; -fx-background-color: #fee2e2; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
                     default             -> pill.setStyle("-fx-text-fill: #15803d; -fx-background-color: #dcfce7; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 8px; -fx-font-size: 11px;");
                 }
             }

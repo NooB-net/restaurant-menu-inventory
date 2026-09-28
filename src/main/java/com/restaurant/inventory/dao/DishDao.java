@@ -20,23 +20,30 @@ public class DishDao implements GenericDao<Dish, String> {
 
     @Override
     public void create(Dish entity) {
-        String insertDish = "INSERT OR REPLACE INTO dishes (name, category, price, image_name) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(insertDish)) {
-            pstmt.setString(1, entity.getName());
-            pstmt.setString(2, entity.getCategory());
-            pstmt.setDouble(3, entity.getPrice());
-            pstmt.setString(4, entity.getImageName());
-            pstmt.executeUpdate();
+        String insertDish = "INSERT INTO dishes (name, category, price, image_name) VALUES (?, ?, ?, ?) " +
+                "ON CONFLICT(name) DO UPDATE SET category = excluded.category, price = excluded.price, image_name = excluded.image_name";
+        try (Connection conn = DatabaseManager.getConnection()) {
+            try (PreparedStatement pstmt = conn.prepareStatement(insertDish)) {
+                pstmt.setString(1, entity.getName());
+                pstmt.setString(2, entity.getCategory());
+                pstmt.setDouble(3, entity.getPrice());
+                pstmt.setString(4, entity.getImageName());
+                pstmt.executeUpdate();
+            }
 
-            // Insert recipe relationship lines
-            saveRecipeLines(conn, entity);
+            // Insert recipe relationship lines only if recipes are present
+            if (!entity.getRecipe().isEmpty()) {
+                saveRecipeLines(conn, entity);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private void saveRecipeLines(Connection conn, Dish dish) throws SQLException {
+        if (dish.getRecipe().isEmpty()) {
+            return;
+        }
         String delRecipe = "DELETE FROM recipes WHERE dish_name = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(delRecipe)) {
             pstmt.setString(1, dish.getName());
@@ -49,9 +56,8 @@ public class DishDao implements GenericDao<Dish, String> {
                 pstmt.setString(1, dish.getName());
                 pstmt.setString(2, line.getIngredient().getName());
                 pstmt.setDouble(3, line.getAmount());
-                pstmt.addBatch();
+                pstmt.executeUpdate();
             }
-            pstmt.executeBatch();
         }
     }
 
@@ -133,15 +139,18 @@ public class DishDao implements GenericDao<Dish, String> {
     @Override
     public void update(Dish entity) {
         String sql = "UPDATE dishes SET category = ?, price = ?, image_name = ? WHERE name = ?";
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, entity.getCategory());
-            pstmt.setDouble(2, entity.getPrice());
-            pstmt.setString(3, entity.getImageName());
-            pstmt.setString(4, entity.getName());
-            pstmt.executeUpdate();
+        try (Connection conn = DatabaseManager.getConnection()) {
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, entity.getCategory());
+                pstmt.setDouble(2, entity.getPrice());
+                pstmt.setString(3, entity.getImageName());
+                pstmt.setString(4, entity.getName());
+                pstmt.executeUpdate();
+            }
 
-            saveRecipeLines(conn, entity);
+            if (!entity.getRecipe().isEmpty()) {
+                saveRecipeLines(conn, entity);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

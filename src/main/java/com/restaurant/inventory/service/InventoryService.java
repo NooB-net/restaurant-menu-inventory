@@ -95,8 +95,43 @@ public final class InventoryService {
             List<Dish> fromDbDishes = dishDao.findAllWithIngredients(lookup);
             dishes.setAll(fromDbDishes);
 
+            // Self-healing: if dishes have no recipe lines, attach default recipes and persist
+            boolean hasRecipes = dishes.stream().anyMatch(d -> !d.getRecipe().isEmpty());
+            if (!hasRecipes) {
+                attachDefaultRecipes(lookup);
+            }
+
             List<Person> fromDbStaff = staffDao.findAll();
             staff.setAll(fromDbStaff);
+        }
+    }
+
+    private void attachDefaultRecipes(Map<String, Ingredient> lookup) {
+        for (Dish dish : dishes) {
+            switch (dish.getName()) {
+                case "Garden Salad" -> addRecipeLine(dish, lookup, "Lettuce", 100.0, "Tomato", 80.0, "Cucumber", 60.0);
+                case "Tomato Soup" -> addRecipeLine(dish, lookup, "Tomato", 200.0, "Cream", 30.0);
+                case "Cheeseburger" -> addRecipeLine(dish, lookup, "Beef Patty", 1.0, "Burger Bun", 1.0, "Cheese Slice", 1.0, "Lettuce", 30.0, "Tomato", 40.0);
+                case "Margherita Pizza" -> addRecipeLine(dish, lookup, "Pizza Dough", 1.0, "Mozzarella", 150.0, "Tomato Sauce", 80.0);
+                case "Chicken Alfredo Pasta" -> addRecipeLine(dish, lookup, "Spaghetti", 200.0, "Chicken", 150.0, "Cream", 100.0);
+                case "Orange Juice" -> addRecipeLine(dish, lookup, "Orange", 3.0);
+                case "Mango Shake" -> addRecipeLine(dish, lookup, "Mango", 2.0, "Milk", 250.0);
+                case "Fruit Salad" -> addRecipeLine(dish, lookup, "Mango", 1.0, "Orange", 1.0, "Apple", 1.0);
+            }
+            if (!dish.getRecipe().isEmpty()) {
+                dishDao.update(dish);
+            }
+        }
+    }
+
+    private void addRecipeLine(Dish dish, Map<String, Ingredient> lookup, Object... ingAndAmounts) {
+        for (int i = 0; i < ingAndAmounts.length; i += 2) {
+            String name = (String) ingAndAmounts[i];
+            double amount = ((Number) ingAndAmounts[i + 1]).doubleValue();
+            Ingredient ing = lookup.get(name);
+            if (ing != null) {
+                dish.needs(ing, amount);
+            }
         }
     }
 
@@ -108,6 +143,11 @@ public final class InventoryService {
     public void fetchRealFoodImagesAsync() {
         ThreadPoolManager.execute(() -> {
             for (Dish dish : dishes) {
+                String currentImage = dish.getImageName();
+                // Skip dishes that already have a proper https image URL (already curated/fetched)
+                if (currentImage != null && (currentImage.startsWith("https://") || currentImage.startsWith("http://"))) {
+                    continue;
+                }
                 String realImgUrl = FoodApiClient.fetchRealFoodImageUrl(dish.getName());
                 if (realImgUrl != null && !realImgUrl.isBlank()) {
                     Platform.runLater(() -> {
@@ -175,25 +215,43 @@ public final class InventoryService {
                 quantity, dish.getName(), total), depleted);
     }
 
-    /** Returns all ingredients that need to be purchased (out of stock or low). */
+    /** Returns all ingredients that need to be purchased (out of stock, low, or causing dishes to be out of stock). */
     public List<Ingredient> getItemsNeedingPurchase() {
-        return ingredients.stream()
-                .filter(Ingredient::needsPurchase)
-                .collect(Collectors.toList());
+        java.util.Set<Ingredient> needed = new java.util.LinkedHashSet<>();
+
+        // 1. Ingredients that are out of stock (quantity <= 0) or below safe threshold
+        for (Ingredient i : ingredients) {
+            if (i.needsPurchase() || i.isOutOfStock()) {
+                needed.add(i);
+            }
+        }
+
+        // 2. Ingredients of menu items that are out of stock due to shortage
+        for (Dish dish : dishes) {
+            if (!dish.isAvailable()) {
+                for (RecipeLine line : dish.getRecipe()) {
+                    Ingredient ing = line.getIngredient();
+                    if (ing.getQuantity() < line.getAmount() || ing.isOutOfStock() || ing.needsPurchase()) {
+                        needed.add(ing);
+                    }
+                }
+            }
+        }
+
+        return new ArrayList<>(needed);
     }
 
     /** Automatically purchases/restocks all ingredients that are depleted or low. */
     public int purchaseAllDeficits() {
         int count = 0;
-        for (Ingredient ingredient : ingredients) {
-            if (ingredient.needsPurchase()) {
-                double toAdd = ingredient.getSuggestedPurchase();
-                if (toAdd <= 0) {
-                    toAdd = Math.max(10, ingredient.getMinLevel() * 2);
-                }
-                ingredient.add(toAdd);
-                count++;
+        List<Ingredient> neededList = getItemsNeedingPurchase();
+        for (Ingredient ingredient : neededList) {
+            double toAdd = ingredient.getSuggestedPurchase();
+            if (toAdd <= 0) {
+                toAdd = Math.max(10, ingredient.getMinLevel() * 2);
             }
+            ingredient.add(toAdd);
+            count++;
         }
         updateAlert();
         persistAllIngredientsAsync();
@@ -239,6 +297,18 @@ public final class InventoryService {
     public void resetToDefaults() {
         for (Ingredient ingredient : ingredients) {
             ingredient.setQuantity(ingredient.getDefaultQuantity());
+        }
+        for (Dish dish : dishes) {
+            switch (dish.getName()) {
+                case "Garden Salad" -> dish.setImageName("salad.png");
+                case "Tomato Soup" -> dish.setImageName("soup.png");
+                case "Cheeseburger" -> dish.setImageName("burger.png");
+                case "Margherita Pizza" -> dish.setImageName("pizza.png");
+                case "Chicken Alfredo Pasta" -> dish.setImageName("pasta.png");
+                case "Orange Juice" -> dish.setImageName("juice.png");
+                case "Mango Shake" -> dish.setImageName("juice.png");
+                case "Fruit Salad" -> dish.setImageName("dessert.png");
+            }
         }
         orderHistory.clear();
         updateAlert();
@@ -305,11 +375,7 @@ public final class InventoryService {
 
     private void persistAllIngredientsAsync() {
         List<Ingredient> copy = new ArrayList<>(ingredients);
-        ThreadPoolManager.execute(() -> {
-            for (Ingredient i : copy) {
-                ingredientDao.create(i);
-            }
-        });
+        ThreadPoolManager.execute(() -> ingredientDao.saveAll(copy));
     }
 
     public void updateDish(Dish dish) {

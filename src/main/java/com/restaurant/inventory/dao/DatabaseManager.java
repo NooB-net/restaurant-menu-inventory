@@ -29,8 +29,9 @@ public final class DatabaseManager {
     public static Connection getConnection() throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL);
         try (Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA journal_mode = WAL;");
             stmt.execute("PRAGMA foreign_keys = ON;");
-            stmt.execute("PRAGMA busy_timeout = 3000;");
+            stmt.execute("PRAGMA busy_timeout = 10000;");
         }
         return conn;
     }

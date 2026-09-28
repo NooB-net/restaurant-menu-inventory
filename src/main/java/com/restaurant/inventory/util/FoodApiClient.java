@@ -51,6 +51,11 @@ public final class FoodApiClient {
             return null;
         }
 
+        // Curated high quality food images for our catalog take top priority
+        if (IMAGE_URL_CACHE.containsKey(query)) {
+            return IMAGE_URL_CACHE.get(query);
+        }
+
         // Clean query keyword for search (e.g. "Chicken Alfredo Pasta" -> "pasta" or "chicken")
         String keyword = extractSearchKeyword(query);
 

@@ -62,25 +62,42 @@ public class Dish extends MenuItemBase {
      */
     public Image getImage() {
         String img = getImageName();
-        if (img == null || img.trim().isEmpty() || "none".equalsIgnoreCase(img)) {
-            return null;
+        if (img != null && !img.trim().isEmpty() && !"none".equalsIgnoreCase(img)) {
+            try {
+                if (img.startsWith("file:") || img.startsWith("http:") || img.startsWith("https:")) {
+                    Image loaded = new Image(img, false);
+                    if (!loaded.isError()) {
+                        return loaded;
+                    }
+                }
+                File localFile = new File(img);
+                if (localFile.exists() && localFile.isFile()) {
+                    return new Image(localFile.toURI().toString());
+                }
+                URL res = getClass().getResource("/images/" + img);
+                if (res != null) {
+                    return new Image(res.toExternalForm());
+                }
+            } catch (Exception e) {
+                // Ignore and fall back to category image
+            }
         }
-        try {
-            if (img.startsWith("file:") || img.startsWith("http:") || img.startsWith("https:")) {
-                return new Image(img);
-            }
-            File localFile = new File(img);
-            if (localFile.exists() && localFile.isFile()) {
-                return new Image(localFile.toURI().toString());
-            }
-            URL res = getClass().getResource("/images/" + img);
-            if (res != null) {
-                return new Image(res.toExternalForm());
-            }
-        } catch (Exception e) {
-            // Ignore corrupted or missing image path
-        }
-        return null;
+        return getDefaultLocalImage();
+    }
+
+    private Image getDefaultLocalImage() {
+        String n = getName().toLowerCase();
+        String fallback = "placeholder.png";
+        if (n.contains("burger")) fallback = "burger.png";
+        else if (n.contains("pizza")) fallback = "pizza.png";
+        else if (n.contains("pasta")) fallback = "pasta.png";
+        else if (n.contains("salad")) fallback = "salad.png";
+        else if (n.contains("soup")) fallback = "soup.png";
+        else if (n.contains("juice") || n.contains("shake")) fallback = "juice.png";
+        else if (n.contains("dessert")) fallback = "dessert.png";
+
+        URL res = getClass().getResource("/images/" + fallback);
+        return res != null ? new Image(res.toExternalForm()) : null;
     }
 
     public List<RecipeLine> getRecipe() { return Collections.unmodifiableList(recipe); }
@@ -90,10 +107,10 @@ public class Dish extends MenuItemBase {
         return missingIngredients(servings).isEmpty();
     }
 
-    /** True if at least one serving can be prepared. */
+    /** True if at least one serving can be prepared. Dishes with no recipe are not considered available. */
     @Override
     public boolean isAvailable() {
-        return canMake(1);
+        return !recipe.isEmpty() && canMake(1);
     }
 
     /** Maximum number of servings that can be prepared with current stock. */
