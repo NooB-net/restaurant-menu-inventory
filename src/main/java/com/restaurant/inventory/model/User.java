@@ -11,11 +11,16 @@ import java.time.LocalDate;
  * Model representing an application user (Customer or Administrator).
  * Supports profile management with observable JavaFX properties.
  */
-public class User {
+public class User implements Identifiable {
 
     private final StringProperty username = new SimpleStringProperty();
     private final StringProperty password = new SimpleStringProperty();
     private final StringProperty fullName = new SimpleStringProperty();
+
+    @Override
+    public String getId() {
+        return getUsername();
+    }
     private final ObjectProperty<Role> role = new SimpleObjectProperty<>();
     private final StringProperty email = new SimpleStringProperty();
     private final StringProperty phone = new SimpleStringProperty();

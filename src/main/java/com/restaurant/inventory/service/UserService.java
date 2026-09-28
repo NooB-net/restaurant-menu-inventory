@@ -1,16 +1,21 @@
 package com.restaurant.inventory.service;
 
+import com.restaurant.inventory.dao.DatabaseManager;
+import com.restaurant.inventory.dao.UserDao;
 import com.restaurant.inventory.model.Role;
 import com.restaurant.inventory.model.User;
+import com.restaurant.inventory.util.ThreadPoolManager;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Service managing user accounts, authentication, active session, and profile updates.
+ * Backed by SQLite database persistence (UserDao) with thread pool execution.
  */
 public final class UserService {
 
@@ -22,11 +27,22 @@ public final class UserService {
         return INSTANCE;
     }
 
+    private final UserDao userDao = new UserDao();
     private final ObservableList<User> users = FXCollections.observableArrayList();
     private final ObjectProperty<User> currentUser = new SimpleObjectProperty<>(null);
 
     private UserService() {
-        seedUsers();
+        DatabaseManager.initializeDatabase();
+        loadUsersFromDb();
+    }
+
+    private void loadUsersFromDb() {
+        List<User> fromDb = userDao.findAll();
+        if (fromDb.isEmpty()) {
+            seedUsers();
+        } else {
+            users.setAll(fromDb);
+        }
     }
 
     public ObservableList<User> getUsers() {
@@ -86,7 +102,7 @@ public final class UserService {
                 .orElse(null);
     }
 
-    /** Registers a new user. */
+    /** Registers a new user and persists to SQLite. */
     public AuthResult register(String username, String password, String fullName, Role role,
                                String email, String phone, String country, LocalDate dob,
                                String gender, String bio, String avatarPath) {
@@ -104,7 +120,9 @@ public final class UserService {
         }
 
         User newUser = new User(
-                username.trim(), password, fullName.trim(),
+                username.trim(),
+                password == null ? "" : password,
+                fullName.trim(),
                 role == null ? Role.USER : role,
                 email == null ? "" : email.trim(),
                 phone == null ? "" : phone.trim(),
@@ -116,7 +134,13 @@ public final class UserService {
         );
 
         users.add(newUser);
+        // Persist asynchronously in thread pool
+        ThreadPoolManager.execute(() -> userDao.create(newUser));
         return new AuthResult(true, "Account created successfully.", newUser);
+    }
+
+    public void updateUser(User user) {
+        ThreadPoolManager.execute(() -> userDao.update(user));
     }
 
     /** Resets users to default starting state. */
@@ -128,8 +152,7 @@ public final class UserService {
 
     /** Preloaded sample accounts for Admin and Normal Users. */
     private void seedUsers() {
-        // Administrator Account
-        users.add(new User(
+        User admin = new User(
                 "admin",
                 "admin123",
                 "Sarah Jenkins",
@@ -141,10 +164,9 @@ public final class UserService {
                 "Female",
                 "Head Kitchen Administrator & Inventory Supervisor",
                 "salad.png"
-        ));
+        );
 
-        // Normal User / Customer 1
-        users.add(new User(
+        User user = new User(
                 "user",
                 "",
                 "Alex Morgan",
@@ -156,10 +178,9 @@ public final class UserService {
                 "Male",
                 "Regular customer & Italian food lover",
                 "burger.png"
-        ));
+        );
 
-        // Normal User / Customer 2
-        users.add(new User(
+        User ayesha = new User(
                 "ayesha",
                 "",
                 "Ayesha Rahman",
@@ -171,6 +192,11 @@ public final class UserService {
                 "Female",
                 "Food critic & dessert enthusiast",
                 "dessert.png"
-        ));
+        );
+
+        users.addAll(admin, user, ayesha);
+        for (User u : users) {
+            userDao.create(u);
+        }
     }
 }

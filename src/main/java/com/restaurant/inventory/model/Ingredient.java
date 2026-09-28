@@ -10,7 +10,7 @@ import javafx.beans.property.StringProperty;
 /**
  * MODEL: an ingredient kept in the kitchen stock (e.g. "Beef Patty", 20 pcs).
  */
-public class Ingredient {
+public class Ingredient implements Identifiable {
 
     private final StringProperty name = new SimpleStringProperty();
     private final StringProperty unit = new SimpleStringProperty();
@@ -21,12 +21,21 @@ public class Ingredient {
     /** "OK", "LOW" or "OUT OF STOCK" - recalculated automatically when quantity changes. */
     private final StringBinding status;
 
+    @Override
+    public String getId() {
+        return getName();
+    }
+
     public Ingredient(String name, String unit, double quantity, double minLevel) {
+        this(name, unit, quantity, minLevel, quantity);
+    }
+
+    public Ingredient(String name, String unit, double quantity, double minLevel, double defaultQuantity) {
         this.name.set(name);
         this.unit.set(unit);
         this.quantity.set(quantity);
         this.minLevel.set(minLevel);
-        this.defaultQuantity = quantity;
+        this.defaultQuantity = defaultQuantity;
 
         this.status = Bindings.createStringBinding(() -> {
             double q = getQuantity();

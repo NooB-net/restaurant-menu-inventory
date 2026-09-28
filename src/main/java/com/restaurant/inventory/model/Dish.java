@@ -15,22 +15,19 @@ import java.util.List;
  * A dish knows which ingredients it needs, so it can tell whether it can be prepared.
  * Supports dynamic image addition, replacement, and removal by Administrators.
  */
-public class Dish {
+public class Dish extends MenuItemBase {
 
     /** Built-in images stored in src/main/resources/images. */
     public static final List<String> IMAGE_FILES = List.of(
             "burger.png", "pizza.png", "pasta.png", "salad.png",
             "soup.png", "juice.png", "dessert.png");
 
-    private final String name;
-    private final String category;
     private final double price;
     private final StringProperty imageName = new SimpleStringProperty();
     private final List<RecipeLine> recipe = new ArrayList<>();
 
     public Dish(String name, String category, double price, String imageName) {
-        this.name = name;
-        this.category = category;
+        super(name, category);
         this.price = price;
         this.imageName.set(imageName);
     }
@@ -41,8 +38,7 @@ public class Dish {
         return this;
     }
 
-    public String getName() { return name; }
-    public String getCategory() { return category; }
+    @Override
     public double getPrice() { return price; }
 
     public String getImageName() { return imageName.get(); }
@@ -95,6 +91,7 @@ public class Dish {
     }
 
     /** True if at least one serving can be prepared. */
+    @Override
     public boolean isAvailable() {
         return canMake(1);
     }
@@ -132,5 +129,5 @@ public class Dish {
     }
 
     @Override
-    public String toString() { return name; }
+    public String toString() { return getName(); }
 }

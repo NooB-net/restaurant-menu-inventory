@@ -259,6 +259,9 @@ public class ProfileController implements Initializable {
         profileMessageLabel.setStyle("-fx-text-fill: #16a34a; -fx-font-weight: bold;");
         profileMessageLabel.setText("Profile updated successfully!");
 
+        // Persist to SQLite Database
+        userService.updateUser(user);
+
         currentPasswordField.clear();
         newPasswordField.clear();
         confirmPasswordField.clear();

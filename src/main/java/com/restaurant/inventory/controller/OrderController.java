@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -35,6 +36,7 @@ import java.util.ResourceBundle;
 public class OrderController implements Initializable {
 
     // ---- injected from OrderView.fxml
+    @FXML private BorderPane orderRootPane;
     @FXML private HBox actionBar;
     @FXML private ListView<Dish> dishList;
     @FXML private ListView<String> historyList;
@@ -98,6 +100,11 @@ public class OrderController implements Initializable {
             refreshSelectedLabel();
             updateDishAvailabilityWarning();
         });
+
+        // Layout Responsiveness: dynamically constrain recipe table width to container
+        if (orderRootPane != null && recipeTable != null) {
+            recipeTable.prefWidthProperty().bind(orderRootPane.widthProperty().multiply(0.48));
+        }
 
         dishList.getSelectionModel().selectFirst();
     }
@@ -389,6 +396,7 @@ public class OrderController implements Initializable {
         File file = chooser.showOpenDialog(dishImage.getScene().getWindow());
         if (file != null) {
             dish.setImageName(file.toURI().toString());
+            service.updateDish(dish);
             Image newImg = dish.getImage();
             dishImage.setImage(newImg != null ? newImg : loadResourceImage("placeholder.png"));
             dishList.refresh();
@@ -409,6 +417,7 @@ public class OrderController implements Initializable {
         List<String> files = Dish.IMAGE_FILES;
         int next = (files.indexOf(dish.getImageName()) + 1) % files.size();
         dish.setImageName(files.get(next));
+        service.updateDish(dish);
         Image newImg = dish.getImage();
         dishImage.setImage(newImg != null ? newImg : loadResourceImage("placeholder.png"));
         dishList.refresh();
@@ -425,6 +434,7 @@ public class OrderController implements Initializable {
             return;
         }
         dish.removeImage();
+        service.updateDish(dish);
         dishImage.setImage(loadResourceImage("placeholder.png"));
         dishList.refresh();
         AlertUtil.info("Picture Removed", "Removed picture for " + dish.getName() + ". Reverted to placeholder.");

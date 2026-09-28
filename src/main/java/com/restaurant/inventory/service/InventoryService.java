@@ -1,9 +1,16 @@
 package com.restaurant.inventory.service;
 
+import com.restaurant.inventory.dao.DatabaseManager;
+import com.restaurant.inventory.dao.DishDao;
+import com.restaurant.inventory.dao.IngredientDao;
+import com.restaurant.inventory.dao.StaffDao;
 import com.restaurant.inventory.model.Dish;
 import com.restaurant.inventory.model.Ingredient;
 import com.restaurant.inventory.model.Person;
 import com.restaurant.inventory.model.RecipeLine;
+import com.restaurant.inventory.util.FoodApiClient;
+import com.restaurant.inventory.util.ThreadPoolManager;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -20,12 +27,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * The "brain" of the application. One shared instance (singleton) holds all the data,
- * so every tab (controller) sees the same ingredients, dishes and staff.
+ * The "brain" of the application. One shared instance (singleton) holds all data,
+ * backed by SQLite Database via DAOs, multi-threading thread pool, and real HTTP food image fetching.
  *
  * Core idea: ordering a dish -> deduct its ingredients from stock -> show what is out of stock.
  */
@@ -44,6 +53,10 @@ public final class InventoryService {
         return INSTANCE;
     }
 
+    private final IngredientDao ingredientDao = new IngredientDao();
+    private final DishDao dishDao = new DishDao();
+    private final StaffDao staffDao = new StaffDao();
+
     // The "extractor" makes the list fire an update event whenever an ingredient's quantity changes.
     private final ObservableList<Ingredient> ingredients =
             FXCollections.observableArrayList(i -> new Observable[]{ i.quantityProperty() });
@@ -55,9 +68,56 @@ public final class InventoryService {
     private final IntegerProperty stockVersion = new SimpleIntegerProperty(0);
 
     private InventoryService() {
-        seedData();
-        ingredients.addListener((ListChangeListener<Ingredient>) change -> updateAlert());
+        DatabaseManager.initializeDatabase();
+        loadAllFromDatabase();
+
+        ingredients.addListener((ListChangeListener<Ingredient>) change -> {
+            updateAlert();
+            persistAllIngredientsAsync();
+        });
+        dishes.addListener((ListChangeListener<Dish>) change -> updateAlert());
         updateAlert();
+
+        // Background multi-threading: fetch real web images for dishes via REST API
+        fetchRealFoodImagesAsync();
+    }
+
+    private void loadAllFromDatabase() {
+        List<Ingredient> fromDbIngredients = ingredientDao.findAll();
+        if (fromDbIngredients.isEmpty()) {
+            seedData();
+        } else {
+            ingredients.setAll(fromDbIngredients);
+            Map<String, Ingredient> lookup = new HashMap<>();
+            for (Ingredient i : ingredients) {
+                lookup.put(i.getName(), i);
+            }
+            List<Dish> fromDbDishes = dishDao.findAllWithIngredients(lookup);
+            dishes.setAll(fromDbDishes);
+
+            List<Person> fromDbStaff = staffDao.findAll();
+            staff.setAll(fromDbStaff);
+        }
+    }
+
+    /**
+     * Networking & Concurrency:
+     * Uses ThreadPoolManager to asynchronously make HTTP requests to TheMealDB REST API,
+     * parse JSON, and apply real high-resolution food images to dishes.
+     */
+    public void fetchRealFoodImagesAsync() {
+        ThreadPoolManager.execute(() -> {
+            for (Dish dish : dishes) {
+                String realImgUrl = FoodApiClient.fetchRealFoodImageUrl(dish.getName());
+                if (realImgUrl != null && !realImgUrl.isBlank()) {
+                    Platform.runLater(() -> {
+                        dish.setImageName(realImgUrl);
+                        dishDao.update(dish);
+                    });
+                }
+            }
+            Platform.runLater(() -> stockVersion.set(stockVersion.get() + 1));
+        });
     }
 
     // ------------------------------------------------------------------ getters
@@ -109,6 +169,7 @@ public final class InventoryService {
         orderHistory.add(0, String.format("%s   %d x %s   ($%.2f)", time, quantity, dish.getName(), total));
 
         updateAlert();
+        persistAllIngredientsAsync();
 
         return new OrderResult(true, String.format("Order placed: %d x %s  -  total $%.2f. Ingredients deducted from stock.",
                 quantity, dish.getName(), total), depleted);
@@ -135,6 +196,7 @@ public final class InventoryService {
             }
         }
         updateAlert();
+        persistAllIngredientsAsync();
         return count;
     }
 
@@ -180,6 +242,7 @@ public final class InventoryService {
         }
         orderHistory.clear();
         updateAlert();
+        persistAllIngredientsAsync();
     }
 
     /**
@@ -209,10 +272,12 @@ public final class InventoryService {
             if (existing != null) {
                 existing.setQuantity(qty);
             } else {
-                ingredients.add(new Ingredient(name, unit, qty, 0));
+                Ingredient newIng = new Ingredient(name, unit, qty, 0);
+                ingredients.add(newIng);
             }
             count++;
         }
+        persistAllIngredientsAsync();
         return count;
     }
 
@@ -238,13 +303,36 @@ public final class InventoryService {
         stockVersion.set(stockVersion.get() + 1);
     }
 
+    private void persistAllIngredientsAsync() {
+        List<Ingredient> copy = new ArrayList<>(ingredients);
+        ThreadPoolManager.execute(() -> {
+            for (Ingredient i : copy) {
+                ingredientDao.create(i);
+            }
+        });
+    }
+
+    public void updateDish(Dish dish) {
+        ThreadPoolManager.execute(() -> dishDao.update(dish));
+    }
+
+    public void addStaff(Person p) {
+        staff.add(p);
+        ThreadPoolManager.execute(() -> staffDao.create(p));
+    }
+
+    public void removeStaff(Person p) {
+        staff.remove(p);
+        ThreadPoolManager.execute(() -> staffDao.delete(p.getName()));
+    }
+
     private Ingredient stock(String name, String unit, double qty, double minLevel) {
         Ingredient ingredient = new Ingredient(name, unit, qty, minLevel);
         ingredients.add(ingredient);
         return ingredient;
     }
 
-    /** Sample data so the app is useful the first time you run it. */
+    /** Sample data seeded into SQLite database. */
     private void seedData() {
         Ingredient patty      = stock("Beef Patty",   "pcs", 6,    2);
         Ingredient bun        = stock("Burger Bun",   "pcs", 10,   2);
@@ -289,5 +377,16 @@ public final class InventoryService {
                 LocalDate.of(1994, 9, 3), "", "dessert.png"));
         staff.add(new Person("John Smith", "Male", "Beginner", "United Kingdom",
                 LocalDate.of(2001, 1, 20), "", "salad.png"));
+
+        // Persist all initial seed data into SQLite
+        for (Ingredient i : ingredients) {
+            ingredientDao.create(i);
+        }
+        for (Dish d : dishes) {
+            dishDao.create(d);
+        }
+        for (Person p : staff) {
+            staffDao.create(p);
+        }
     }
 }

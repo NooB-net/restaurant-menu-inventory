@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -28,6 +29,7 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
 
+    @FXML private BorderPane mainRootBorderPane;
     @FXML private Label welcomeLabel;
     @FXML private Label statusLabel;
 
@@ -53,6 +55,12 @@ public class MainController implements Initializable {
 
         // Status bar always reflects out-of-stock items
         statusLabel.textProperty().bind(service.stockAlertProperty());
+
+        // Layout Responsiveness: Bind TabPane dimensions relative to window root dimensions
+        if (mainRootBorderPane != null && mainTabPane != null) {
+            mainTabPane.prefWidthProperty().bind(mainRootBorderPane.widthProperty());
+            mainTabPane.prefHeightProperty().bind(mainRootBorderPane.heightProperty().subtract(100));
+        }
 
         // Update user session information in header and enforce role access
         updateUserHeader();

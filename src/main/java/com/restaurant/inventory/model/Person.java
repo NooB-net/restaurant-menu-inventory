@@ -12,25 +12,23 @@ import java.time.LocalDate;
  * Represents a staff member of the restaurant.
  * JavaFX properties are used so the TableView can observe changes.
  */
-public class Person {
+public class Person extends AbstractPerson {
 
-    private final StringProperty name = new SimpleStringProperty();
-    private final StringProperty gender = new SimpleStringProperty();
     private final StringProperty skillLevel = new SimpleStringProperty();
-    private final StringProperty country = new SimpleStringProperty();
-    private final ObjectProperty<LocalDate> dateOfBirth = new SimpleObjectProperty<>();
     private final StringProperty hobbies = new SimpleStringProperty();
     private final StringProperty photoFile = new SimpleStringProperty();
 
     public Person(String name, String gender, String skillLevel, String country,
                   LocalDate dateOfBirth, String hobbies, String photoFile) {
-        this.name.set(name);
-        this.gender.set(gender);
+        super(name, gender, country, dateOfBirth);
         this.skillLevel.set(skillLevel);
-        this.country.set(country);
-        this.dateOfBirth.set(dateOfBirth);
         this.hobbies.set(hobbies);
         this.photoFile.set(photoFile);
+    }
+
+    @Override
+    public String getRoleTitle() {
+        return "Staff Member (" + getSkillLevel() + ")";
     }
 
     // ----- name -----

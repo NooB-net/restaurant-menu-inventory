@@ -124,7 +124,7 @@ public class StaffController implements Initializable {
             AlertUtil.warning("Nothing selected", "Click a row in the table first.");
             return;
         }
-        service.getStaff().remove(selected);
+        service.removeStaff(selected);
     }
 
     // ================================================================= RADIO BUTTONS
@@ -231,7 +231,7 @@ public class StaffController implements Initializable {
                 dob,
                 "",  // hobbies removed
                 photoUriForTable);
-        service.getStaff().add(person);
+        service.addStaff(person);
 
         formMessageLabel.setStyle("-fx-text-fill: #15803d;");
         formMessageLabel.setText("✓ Staff member \"" + name + "\" added successfully.");
