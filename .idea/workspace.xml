@@ -4,51 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3504aa61-08d5-4e7f-87f1-ebea7db2faf1" name="Changes" comment="v2">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/InventoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/InventoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/OrderController.java" afterDir="false" />
+    <list default="true" id="3504aa61-08d5-4e7f-87f1-ebea7db2faf1" name="Changes" comment="edited">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/ProfileController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/StaffController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/StaffController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/controller/ToolsController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/model/Dish.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/model/Dish.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/service/InventoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/service/InventoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/restaurant/inventory/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/InventoryView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/InventoryView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/LoginView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/LoginView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/MainView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/OrderView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/OrderView.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/ProfileView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/ProfileView.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/StaffView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/StaffView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/ToolsView.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/restaurant/inventory/RestaurantAppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/restaurant/inventory/RestaurantAppTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/InventoryController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/MainController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/OrderController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/ProfileController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/ProfileController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/StaffController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/StaffController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/StaffController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/StaffController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/controller/ToolsController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/service/InventoryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/service/InventoryService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/restaurant/inventory/service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/InventoryView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/InventoryView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/LoginView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/LoginView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/MainView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/OrderView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/OrderView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/ProfileView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/ProfileView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/fxml/StaffView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/StaffView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.restaurant.inventory.RestaurantAppTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.restaurant.inventory.RestaurantAppTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.restaurant.inventory.RestaurantAppTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.restaurant.inventory.RestaurantAppTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/restaurant/inventory/RestaurantAppTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/restaurant/inventory/RestaurantAppTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +26,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="v2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -87,23 +49,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0000000001089502" />
-      <entry key="S5" value="1.000156790100047" />
-      <entry key="S10" value="1.017706900766722" />
-      <entry key="S30" value="1.4137396304200824" />
-      <entry key="S60" value="1.9096570222335698" />
-      <entry key="M2" value="2.348818815152188" />
-      <entry key="M5" value="2.7084386607126203" />
-      <entry key="M10" value="2.8484796949298534" />
-      <entry key="M15" value="2.897666042043193" />
-      <entry key="M30" value="2.948161201479211" />
-      <entry key="H1" value="2.973910433266936" />
-      <entry key="H2" value="2.986912496084042" />
-      <entry key="H4" value="2.9940813193005007" />
-      <entry key="D1" value="3.9298935765768936" />
-      <entry key="W1" value="6.247834769904715" />
+      <entry key="MS100" value="1.4231382258712277" />
+      <entry key="MS500" value="3.2681100866582486" />
+      <entry key="S2" value="5.999991409604411" />
+      <entry key="S5" value="7.092879135030841" />
+      <entry key="S10" value="7.526251198531683" />
+      <entry key="S30" value="7.837355645553088" />
+      <entry key="S60" value="7.9180710113356945" />
+      <entry key="M2" value="7.9588825909257315" />
+      <entry key="M5" value="7.98351618056499" />
+      <entry key="M10" value="7.9917519345779455" />
+      <entry key="M15" value="7.994499920814392" />
+      <entry key="M30" value="7.9972492759897476" />
+      <entry key="H1" value="7.998648971012214" />
+      <entry key="H2" value="8.0078768041087" />
+      <entry key="H4" value="8.188301676748788" />
+      <entry key="D1" value="11.355216086510735" />
+      <entry key="W1" value="15.585596860965856" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -125,23 +87,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9265880618903709" />
-      <entry key="MS500" value="0.9848664428955506" />
-      <entry key="S2" value="0.9961949482413206" />
-      <entry key="S5" value="0.9986326297420608" />
-      <entry key="S10" value="1.0169221208924517" />
-      <entry key="S30" value="1.4133089125834084" />
-      <entry key="S60" value="1.9093356801791768" />
-      <entry key="M2" value="2.348611195212378" />
-      <entry key="M5" value="2.7083402304582127" />
-      <entry key="M10" value="2.8484274843609674" />
-      <entry key="M15" value="2.8976305335762045" />
-      <entry key="M30" value="2.94814308719469" />
-      <entry key="H1" value="2.973901284321834" />
-      <entry key="H2" value="2.9869078984327286" />
-      <entry key="H4" value="2.9940790120123526" />
-      <entry key="D1" value="3.9298925474696906" />
-      <entry key="W1" value="6.247834393835528" />
+      <entry key="MS100" value="1.3565990443826328" />
+      <entry key="MS500" value="3.236353943433761" />
+      <entry key="S2" value="5.9849004949238385" />
+      <entry key="S5" value="7.085675473429662" />
+      <entry key="S10" value="7.522416691211319" />
+      <entry key="S30" value="7.836021671250558" />
+      <entry key="S60" value="7.917396776590315" />
+      <entry key="M2" value="7.958543640639475" />
+      <entry key="M5" value="7.9833801578347305" />
+      <entry key="M10" value="7.991683849216032" />
+      <entry key="M15" value="7.994454514112494" />
+      <entry key="M30" value="7.997226564404257" />
+      <entry key="H1" value="7.99863761297352" />
+      <entry key="H2" value="8.00787109529405" />
+      <entry key="H4" value="8.188298553430883" />
+      <entry key="D1" value="11.355214655972206" />
+      <entry key="W1" value="15.585596362506964" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -162,7 +124,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "v2",
+    "git-widget-placeholder": "final-ver",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/LAPTOP 3/Downloads/restaurant-menu-inventory",
     "node.js.detected.package.eslint": "true",
@@ -201,7 +163,8 @@
     <MESSAGE value="Basic Structure" />
     <MESSAGE value="Edited version" />
     <MESSAGE value="v2" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2" />
+    <MESSAGE value="edited" />
+    <option name="LAST_COMMIT_MESSAGE" value="edited" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

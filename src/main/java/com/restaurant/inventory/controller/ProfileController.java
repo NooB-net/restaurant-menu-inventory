@@ -53,6 +53,8 @@ public class ProfileController implements Initializable {
     @FXML private PasswordField newPasswordField;
     @FXML private PasswordField confirmPasswordField;
 
+    @FXML private javafx.scene.layout.VBox passwordSection;
+
     @FXML private Label profileMessageLabel;
 
     private final UserService userService = UserService.getInstance();
@@ -114,6 +116,13 @@ public class ProfileController implements Initializable {
 
         pendingAvatarPath = user.getAvatarPath();
         displayAvatar(pendingAvatarPath);
+
+        // Only Administrators can change password
+        boolean isAdmin = user.getRole() == Role.ADMIN;
+        if (passwordSection != null) {
+            passwordSection.setVisible(isAdmin);
+            passwordSection.setManaged(isAdmin);
+        }
 
         currentPasswordField.clear();
         newPasswordField.clear();

@@ -98,7 +98,7 @@ public class Dish extends MenuItemBase {
 
     /** Maximum number of servings that can be prepared with current stock. */
     public int maxServings() {
-        if (recipe.isEmpty()) return 999;
+        if (recipe.isEmpty()) return 0;
         int max = Integer.MAX_VALUE;
         for (RecipeLine line : recipe) {
             if (line.getAmount() <= 0) continue;

@@ -326,6 +326,17 @@ public final class InventoryService {
         ThreadPoolManager.execute(() -> staffDao.delete(p.getName()));
     }
 
+    public void updateStaff(Person p) {
+        // Update the in-memory list by replacing the old entry
+        for (int i = 0; i < staff.size(); i++) {
+            if (staff.get(i).getName().equals(p.getName())) {
+                staff.set(i, p);
+                break;
+            }
+        }
+        ThreadPoolManager.execute(() -> staffDao.update(p));
+    }
+
     private Ingredient stock(String name, String unit, double qty, double minLevel) {
         Ingredient ingredient = new Ingredient(name, unit, qty, minLevel);
         ingredients.add(ingredient);
@@ -368,7 +379,7 @@ public final class InventoryService {
         dishes.add(new Dish("Mango Shake", "Drinks", 4.50, "juice.png")
                 .needs(mango, 2).needs(milk, 250));
 
-        dishes.add(new Dish("Fruit Salad", "Desserts", 5.50, "dessert.png")
+        dishes.add(new Dish("Fruit Salad", "Desserts", 5.50, "salad.png")
                 .needs(mango, 1).needs(orange, 1).needs(apple, 1));
 
         staff.add(new Person("Rahim Uddin", "Male", "Expert", "Bangladesh",

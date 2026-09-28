@@ -45,6 +45,7 @@ public class StaffController implements Initializable {
     @FXML private ImageView photoView;
     @FXML private Label photoNameLabel;
     @FXML private Label formMessageLabel;
+    @FXML private Button submitBtn;
 
     // ---- table
     @FXML private TableView<Person> staffTable;
@@ -58,6 +59,8 @@ public class StaffController implements Initializable {
     private final InventoryService service = InventoryService.getInstance();
     private String selectedPhotoUri;
     private String selectedPhotoName;
+    /** Non-null while the form is in "edit" mode – holds the Person being edited. */
+    private Person editingPerson = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -125,6 +128,57 @@ public class StaffController implements Initializable {
             return;
         }
         service.removeStaff(selected);
+    }
+
+    /** Load the selected staff member's data into the form for editing. */
+    @FXML
+    private void onEditStaff() {
+        Person selected = staffTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            AlertUtil.warning("Nothing selected", "Click a staff row in the table first, then press Edit.");
+            return;
+        }
+
+        editingPerson = selected;
+
+        // Populate name
+        nameField.setText(selected.getName());
+        nameField.setEditable(false); // Name is the key – don't allow changing it
+
+        // Gender radio
+        for (Toggle t : genderGroup.getToggles()) {
+            if (((RadioButton) t).getText().equalsIgnoreCase(selected.getGender())) {
+                genderGroup.selectToggle(t);
+                break;
+            }
+        }
+
+        // Skill level radio
+        for (Toggle t : skillGroup.getToggles()) {
+            if (((RadioButton) t).getText().equalsIgnoreCase(selected.getSkillLevel())) {
+                skillGroup.selectToggle(t);
+                break;
+            }
+        }
+
+        countryCombo.setValue(selected.getCountry());
+        dobPicker.setValue(selected.getDateOfBirth());
+
+        // Photo
+        selectedPhotoUri = selected.getPhotoFile();
+        if (selectedPhotoUri != null && !"-".equals(selectedPhotoUri) && !selectedPhotoUri.isBlank()) {
+            Image img = resolveStaffPhoto(selectedPhotoUri);
+            photoView.setImage(img);
+            // Show just the filename portion as label
+            String label = selectedPhotoUri.contains("/") || selectedPhotoUri.contains("\\")
+                    ? selectedPhotoUri.substring(selectedPhotoUri.lastIndexOf('/') + 1)
+                    : selectedPhotoUri;
+            photoNameLabel.setText(label);
+        }
+
+        formMessageLabel.setStyle("-fx-text-fill: #2563eb;");
+        formMessageLabel.setText("✏ Editing \"" + selected.getName() + "\". Modify fields and press Save Changes.");
+        if (submitBtn != null) submitBtn.setText("Save Changes");
     }
 
     // ================================================================= RADIO BUTTONS
@@ -231,15 +285,27 @@ public class StaffController implements Initializable {
                 dob,
                 "",  // hobbies removed
                 photoUriForTable);
-        service.addStaff(person);
 
-        formMessageLabel.setStyle("-fx-text-fill: #15803d;");
-        formMessageLabel.setText("✓ Staff member \"" + name + "\" added successfully.");
+        if (editingPerson != null) {
+            // UPDATE mode
+            service.updateStaff(person);
+            formMessageLabel.setStyle("-fx-text-fill: #15803d;");
+            formMessageLabel.setText("✓ Staff member \"" + name + "\" updated successfully.");
+        } else {
+            // ADD mode
+            service.addStaff(person);
+            formMessageLabel.setStyle("-fx-text-fill: #15803d;");
+            formMessageLabel.setText("✓ Staff member \"" + name + "\" added successfully.");
+        }
+
         clearForm();
     }
 
     private void clearForm() {
+        editingPerson = null;
         nameField.clear();
+        nameField.setEditable(true);
+        if (submitBtn != null) submitBtn.setText("Submit Staff Member");
         genderGroup.selectToggle(null);
         beginnerRadio.setSelected(true);
         countryCombo.setValue(null);

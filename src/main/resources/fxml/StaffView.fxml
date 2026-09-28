@@ -78,7 +78,7 @@
                         </HBox>
                     </VBox>
 
-                    <Button text="Submit Staff Member" styleClass="modern-primary-btn" onAction="#onSubmit" maxWidth="Infinity"/>
+                    <Button fx:id="submitBtn" text="Submit Staff Member" styleClass="modern-primary-btn" onAction="#onSubmit" maxWidth="Infinity"/>
                     <Label fx:id="formMessageLabel" styleClass="info-label" wrapText="true"/>
                 </VBox>
             </content>
@@ -102,7 +102,8 @@
                     <TableColumn fx:id="photoCol" text="Photo" prefWidth="90"/>
                 </columns>
             </TableView>
-            <HBox>
+            <HBox spacing="8">
+                <Button text="✏ Edit Selected" onAction="#onEditStaff" styleClass="secondary-btn"/>
                 <Button text="Remove Selected" onAction="#onRemoveStaff" styleClass="danger-btn"/>
             </HBox>
         </VBox>

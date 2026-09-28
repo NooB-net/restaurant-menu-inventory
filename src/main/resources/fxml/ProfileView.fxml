@@ -122,30 +122,33 @@
 
                 <Separator/>
 
-                <!-- Section 2: Security & Password -->
-                <Label text="Change Password (Optional)" styleClass="card-section-title"/>
-                <GridPane hgap="14" vgap="12">
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="33.3"/>
-                        <ColumnConstraints percentWidth="33.3"/>
-                        <ColumnConstraints percentWidth="33.3"/>
-                    </columnConstraints>
+                <!-- Section 2: Security & Password (Admins only) -->
+                <VBox fx:id="passwordSection" spacing="12">
+                    <Label text="Change Password (Optional)" styleClass="card-section-title"/>
+                    <GridPane hgap="14" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.3"/>
+                            <ColumnConstraints percentWidth="33.3"/>
+                            <ColumnConstraints percentWidth="33.3"/>
+                        </columnConstraints>
 
-                    <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                        <Label text="Current Password" styleClass="field-label"/>
-                        <PasswordField fx:id="currentPasswordField" promptText="Verify old password" styleClass="modern-input"/>
-                    </VBox>
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Current Password" styleClass="field-label"/>
+                            <PasswordField fx:id="currentPasswordField" promptText="Verify old password" styleClass="modern-input"/>
+                        </VBox>
 
-                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                        <Label text="New Password" styleClass="field-label"/>
-                        <PasswordField fx:id="newPasswordField" promptText="At least 4 characters" styleClass="modern-input"/>
-                    </VBox>
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="New Password" styleClass="field-label"/>
+                            <PasswordField fx:id="newPasswordField" promptText="At least 4 characters" styleClass="modern-input"/>
+                        </VBox>
 
-                    <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                        <Label text="Confirm New Password" styleClass="field-label"/>
-                        <PasswordField fx:id="confirmPasswordField" promptText="Repeat new password" styleClass="modern-input"/>
-                    </VBox>
-                </GridPane>
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Confirm New Password" styleClass="field-label"/>
+                            <PasswordField fx:id="confirmPasswordField" promptText="Repeat new password" styleClass="modern-input"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
 
                 <!-- Feedback & Action Buttons -->
                 <HBox spacing="14" alignment="CENTER_LEFT">
